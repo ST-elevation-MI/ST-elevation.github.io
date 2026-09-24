@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#12618a">
+  <title>WORLD CAPITAL QUIZ · 세계 수도 퀴즈</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="countries.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="header">
+    <a class="brand" id="brand-home" href="index.html" aria-label="WORLD CAPITAL QUIZ 홈"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20"/><ellipse cx="24" cy="24" rx="9" ry="20"/><path d="M4 24h40M8 12h32M8 36h32"/></svg><span>WORLD CAPITAL <b>QUIZ</b></span></a>
+    <nav aria-label="메인 메뉴">
+      <a id="nav-home" href="index.html">홈</a>
+      <button type="button" id="header-restart">↻ <span>다시 시작</span></button>
+      <span class="header-score">점수 <strong id="header-score">0</strong></span>
+      <button type="button" id="menu-toggle" aria-expanded="false" aria-controls="instructions">☰ <span>메뉴</span></button>
+    </nav>
+  </header>
+  <svg class="world-map" viewBox="0 0 1200 650" aria-hidden="true"><g><path d="m55 130 85-58 90 18 55 60-28 55-62 7-15 55-38-20-16-51-50-24zM232 275l70 25 39 71-28 107-42 65-20-101-30-84zM370 60l69-23 35 34-40 61-45-16zM525 155l51-55 89 8 35 32 68-33 117-16 88 40 89 5 75 62-24 51-102-1-54 61-59-36-35-57-47 16-34 63-44-17-15-70-49 10-49-28-44 20zM539 253l88-13 58 58-13 86-59 73-35-46-18-75-38-37zM811 320l39 18 16 51-26-8zM899 409l79-26 68 35 15 56-74 24-81-30zM1090 496l21-14 12 40-28 23zM713 414l15-22 9 45-19 18z"/></g></svg>
+  <main>
+    <section class="intro" aria-label="퀴즈 소개"><span class="eyebrow">작은 도전, 넓어지는 세계</span><h1>수도를 맞히며, 세계 한 바퀴!</h1><p>나라 이름을 보고 알맞은 수도를 골라보세요.</p></section>
+    <aside id="instructions" class="instructions" hidden><strong>게임 안내</strong><p>선택한 문제 수만큼 무작위로 뽑은 나라의 수도를 맞혀보세요. 정답마다 1점을 얻습니다. 선택 후에는 답을 바꿀 수 없어요. 정답이면 자동으로 다음 문제로 넘어가며, 오답이면 해설을 확인한 뒤 다음 문제 버튼을 눌러주세요.</p><p>키보드의 Tab과 Enter로도 모든 버튼을 사용할 수 있습니다.</p></aside>
+    <section id="home-screen" class="game home-screen" aria-labelledby="home-title">
+      <div class="game-top"><span class="mode"><span class="status-dot"></span> 나만의 세계 여행</span><span class="round-label">GAME SETUP</span></div>
+      <div class="home-body">
+        <span class="home-icon" aria-hidden="true">◎</span>
+        <h2 id="home-title" tabindex="-1">어디까지 도전해볼까요?</h2>
+        <p class="home-description">UN 회원국 193개국 중 새로운 나라들을 만나보세요.</p>
+        <fieldset class="question-settings"><legend>출제 문제 수</legend>
+          <div class="count-options">
+            <button type="button" id="count-10" class="count-option" aria-pressed="true"><strong>10</strong><span>문제</span><small>가볍게 시작</small></button>
+            <button type="button" id="count-25" class="count-option" aria-pressed="false"><strong>25</strong><span>문제</span><small>조금 더 멀리</small></button>
+            <button type="button" id="count-50" class="count-option" aria-pressed="false"><strong>50</strong><span>문제</span><small>세계 탐험 도전</small></button>
+          </div>
+        </fieldset>
+        <p id="setup-summary" class="setup-summary" aria-live="polite">10개의 나라, 10개의 질문이 기다리고 있어요.</p>
+        <button type="button" id="play" class="primary play-button">PLAY <span aria-hidden="true">→</span></button>
+        <p class="home-tip">시간 제한 없이, 나만의 속도로 즐겨보세요.</p>
+      </div>
+    </section>
+    <section id="game-screen" class="game" aria-label="세계 수도 퀴즈" hidden>
+      <div class="game-top"><span class="mode"><span class="status-dot"></span> 세계 수도 도전</span><span class="question-count" id="question-count">문제 <b>1</b> / 10</span><span class="score-box">점수 <b id="score">0</b></span></div>
+      <div id="progress" class="progress" role="progressbar" aria-label="완료한 문제" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><div id="progress-fill"></div></div>
+      <div id="question-screen" class="game-body">
+        <div class="question-heading"><span class="round-label">CAPITALS OF THE WORLD</span><h2 id="question-title">이 나라의 수도는?</h2><p id="country" tabindex="-1"></p><span class="question-hint">아래에서 정답 하나를 선택하세요</span></div>
+        <div id="answers" class="answers" aria-label="수도 선택지"></div>
+        <div class="answer-footer"><p id="feedback" role="status" aria-live="polite">준비되셨나요? 세계 여행을 시작해요!</p><button type="button" id="next" class="primary" hidden>다음 문제 <span aria-hidden="true">→</span></button></div>
+        <p id="capital-note" class="capital-note" hidden></p>
+      </div>
+      <div id="result-screen" class="result" hidden><span class="result-globe"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20"/><ellipse cx="24" cy="24" rx="9" ry="20"/><path d="M4 24h40M8 12h32M8 36h32"/></svg></span><p class="round-label">QUIZ COMPLETE!</p><h2 id="result-message" tabindex="-1"></h2><p class="result-score"><strong id="result-score"></strong> <span id="result-total">/ 10</span></p><span class="percentage" id="percentage"></span><p class="result-copy">세상을 알아가는 여행, 한 번 더 떠나볼까요?</p><button type="button" id="result-restart" class="primary">↻ 다시 시작</button></div>
+      <div class="game-bottom"><span id="journey-label">지구 한 바퀴, 10개의 질문</span><span>배우는 즐거움, 발견하는 재미 <span aria-hidden="true">✦</span></span></div>
+    </section>
+    <div class="below-game"><span>◎ <b>UN 회원국 193개국</b>을 만나는 여행</span><span>매번 새로운 문제</span><span>시간 제한 없이 천천히</span></div>
+  </main>
+  <footer class="page-footer">EXPLORE THE WORLD. ONE CAPITAL AT A TIME.</footer>
+</body>
+</html>
