@@ -160,7 +160,10 @@ function selectAnswer(selected, capital) {
   const correct = selected.dataset.capital === capital;
   if (correct) score++;
   else mistakes.push({
+    questionIndex: current,
     countryKo: questions[current].countryKo,
+    questionTitle: $("question-title").textContent,
+    options: [...$("answers").children].map((button) => button.dataset.capital),
     selectedCapitalKo: selected.dataset.capital,
     correctCapitalKo: capital
   });
@@ -207,6 +210,10 @@ function showResults() {
   for (const mistake of mistakes) {
     const item = document.createElement("li");
     item.className = "mistake-item";
+    const reviewButton = document.createElement("button");
+    reviewButton.type = "button";
+    reviewButton.className = "mistake-button";
+    reviewButton.setAttribute("aria-label", `${mistake.countryKo} 오답 문제 다시 보기`);
     const country = document.createElement("strong");
     country.textContent = mistake.countryKo;
     const selectedAnswer = document.createElement("span");
@@ -215,10 +222,61 @@ function showResults() {
     const correctAnswer = document.createElement("span");
     correctAnswer.className = "mistake-correct";
     correctAnswer.textContent = `정답: ${mistake.correctCapitalKo}`;
-    item.append(country, selectedAnswer, correctAnswer);
+    reviewButton.append(country, selectedAnswer, correctAnswer);
+    reviewButton.addEventListener("click", () => showMistakeReview(mistake));
+    item.append(reviewButton);
     $("mistake-list").append(item);
   }
   $("result-message").focus();
+}
+function showMistakeReview(mistake) {
+  cancelAutoAdvance();
+  screen = "review";
+  $("result-screen").hidden = true;
+  $("question-screen").hidden = false;
+  $("question-count").textContent = `오답 복습 ${mistakes.indexOf(mistake) + 1} / ${mistakes.length}`;
+  $("country").textContent = mistake.countryKo;
+  $("question-title").textContent = mistake.questionTitle;
+  const note = questions[mistake.questionIndex].capitalNoteKo;
+  $("capital-note").textContent = note || "";
+  $("capital-note").hidden = !note;
+  $("feedback").textContent = `내 답은 ${mistake.selectedCapitalKo}, 정답은 ${mistake.correctCapitalKo}입니다.`;
+  $("feedback").className = "error";
+  $("next").hidden = false;
+  $("next").textContent = "결과로 돌아가기 →";
+  $("answers").replaceChildren();
+  mistake.options.forEach((name, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "answer";
+    button.dataset.capital = name;
+    button.disabled = true;
+    const number = document.createElement("span");
+    number.className = "number";
+    number.textContent = index + 1;
+    number.setAttribute("aria-hidden", "true");
+    const label = document.createElement("span");
+    label.className = "answer-name";
+    label.textContent = name;
+    const mark = document.createElement("span");
+    mark.className = "mark";
+    mark.setAttribute("aria-hidden", "true");
+    if (name === mistake.correctCapitalKo) {
+      button.classList.add("correct");
+      mark.textContent = "✓";
+      button.setAttribute("aria-label", `${name}, 정답`);
+    } else if (name === mistake.selectedCapitalKo) {
+      button.classList.add("wrong");
+      mark.textContent = "✕";
+      button.setAttribute("aria-label", `${name}, 내가 선택한 오답`);
+    } else {
+      button.classList.add("muted");
+      button.setAttribute("aria-label", name);
+    }
+    button.append(number, label, mark);
+    $("answers").append(button);
+  });
+  $("country").focus();
 }
 function advanceQuestion() {
   if (screen !== "game" || !answered || current >= total) return;
@@ -228,7 +286,9 @@ function advanceQuestion() {
   else renderQuestion();
 }
 $("next").addEventListener("click", () => {
-  if (!$("next").hidden) advanceQuestion();
+  if ($("next").hidden) return;
+  if (screen === "review") showResults();
+  else advanceQuestion();
 });
 $("header-restart").addEventListener("click", () => startQuiz());
 $("result-restart").addEventListener("click", () => startQuiz());

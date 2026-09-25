@@ -133,10 +133,34 @@ for (const count of QUESTION_COUNTS) for (let expected = 0; expected <= count; e
   for (let index = 0; index < mistakes.length; index++) {
     const mistake = mistakes[index];
     const item = $('mistake-list').children[index];
-    assert.equal(item.children[0].textContent, mistake.countryKo);
-    assert.equal(item.children[1].textContent, '내 답: ' + mistake.selectedCapitalKo);
-    assert.equal(item.children[2].textContent, '정답: ' + mistake.correctCapitalKo);
+    const reviewButton = item.children[0];
+    assert.equal(reviewButton.children[0].textContent, mistake.countryKo);
+    assert.equal(reviewButton.children[1].textContent, '내 답: ' + mistake.selectedCapitalKo);
+    assert.equal(reviewButton.children[2].textContent, '정답: ' + mistake.correctCapitalKo);
     assert.notEqual(mistake.selectedCapitalKo, mistake.correctCapitalKo);
+    assert.equal(mistake.options.length, 4);
+    assert.equal(new Set(mistake.options).size, 4);
+  }
+  if (mistakes.length) {
+    const scoreBeforeReview = score;
+    const mistake = mistakes[0];
+    $('mistake-list').children[0].children[0].click();
+    assert.equal(screen, 'review');
+    assert.equal($('result-screen').hidden, true);
+    assert.equal($('question-screen').hidden, false);
+    assert.equal($('country').textContent, mistake.countryKo);
+    assert.equal($('question-title').textContent, mistake.questionTitle);
+    assert.deepEqual([...$('answers').children].map(button => button.dataset.capital), mistake.options);
+    assert.ok([...$('answers').children].every(button => button.disabled));
+    assert.ok([...$('answers').children].find(button => button.dataset.capital === mistake.selectedCapitalKo).className.includes('wrong'));
+    assert.ok([...$('answers').children].find(button => button.dataset.capital === mistake.correctCapitalKo).className.includes('correct'));
+    assert.equal($('next').textContent, '결과로 돌아가기 →');
+    assert.equal(score, scoreBeforeReview);
+    $('next').click();
+    assert.equal(screen, 'result');
+    assert.equal($('result-screen').hidden, false);
+    assert.equal($('question-screen').hidden, true);
+    assert.equal(score, scoreBeforeReview);
   }
 }
 $('result-restart').click();
@@ -184,3 +208,4 @@ console.log('PASS: all scores for 10/25/50 questions; home/logo, PLAY, settings,
 
 console.log('PASS: correct answers auto-advance (including final result), wrong answers wait, pending timers cancel on home/restart.');
 console.log('PASS: result review lists every wrong choice with its correct answer and handles perfect scores.');
+console.log('PASS: clicking a mistake restores its original choices in read-only review and returns to results.');

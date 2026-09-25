@@ -43,6 +43,10 @@
 #perfect-review { margin: 0; text-align: center; color: #28734f; font-weight: 700; }
 #mistake-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
 .mistake-item {
+  margin: 0;
+}
+.mistake-button {
+  width: 100%;
   display: grid;
   grid-template-columns: minmax(120px, 1fr) minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
@@ -53,7 +57,11 @@
   border-left: 4px solid #c4504d;
   border-radius: 5px;
   font-size: 14px;
+  text-align: left;
+  color: inherit;
+  transition: background .15s, transform .15s;
 }
+.mistake-button:hover { background: #edf7f4; transform: translateY(-1px); }
 .mistake-item strong, .mistake-item span { overflow-wrap: anywhere; }
 .mistake-item strong { color: var(--ink); }
 .mistake-selected { color: #a33636; }
@@ -61,5 +69,5 @@
 
 @media (max-width: 680px) {
   .mistake-review { padding: 17px 14px; }
-  .mistake-item { grid-template-columns: 1fr; gap: 5px; }
+  .mistake-button { grid-template-columns: 1fr; gap: 5px; }
 }
