@@ -1,0 +1,16 @@
+# Local secrets and machine-specific files. Not a substitute for reviewing commits.
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+.DS_Store
+Thumbs.db
+node_modules/
+_site/
+*.log
+.codex/
+.agents/
+.vscode/
+.idea/

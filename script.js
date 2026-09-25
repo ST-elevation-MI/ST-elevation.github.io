@@ -12,18 +12,25 @@ let answered = false;
 let advanceTimer = null;
 const AUTO_ADVANCE_DELAY = 900;
 
-function shuffle(items) {
+function shuffle(items, random = Math.random) {
   const copy = [...items];
   for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
 }
 
+// Every game starts from all 193 countries and creates a fresh Fisher-Yates
+// permutation. Taking the first N entries therefore gives every country the
+// same N / 193 chance of appearing, independently of previous games.
+function createQuestionDeck(random = Math.random) {
+  return shuffle(countries, random);
+}
+
 function createGame(count = total) {
   if (!QUESTION_COUNTS.includes(count)) throw new Error("지원하지 않는 문제 수입니다.");
-  const game = shuffle(countries).slice(0, count);
+  const game = createQuestionDeck().slice(0, count);
   if (new Set(game.map((country) => country.id)).size !== count) {
     throw new Error("게임 내 국가가 중복되었습니다.");
   }
@@ -32,21 +39,30 @@ function createGame(count = total) {
 function capitalKey(name) {
   return name.normalize("NFKC").trim().toLocaleLowerCase("en");
 }
-function createOptions(country) {
+
+function createDistractorPool(country) {
   const seenKo = new Set([capitalKey(country.capitalKo)]);
   const seenEn = new Set([capitalKey(country.capitalEn)]);
-  const distractors = [];
-  for (const other of shuffle(countries)) {
+  const candidates = [];
+  for (const other of countries) {
     const ko = capitalKey(other.capitalKo);
     const en = capitalKey(other.capitalEn);
     if (other.id === country.id || seenKo.has(ko) || seenEn.has(en)) continue;
     seenKo.add(ko);
     seenEn.add(en);
-    distractors.push(other.capitalKo);
-    if (distractors.length === 3) break;
+    candidates.push(other.capitalKo);
   }
+  return candidates;
+}
+
+function createOptions(country, random = Math.random) {
+  // Deduplicate first, then shuffle the unique pool. Each eligible capital now
+  // has the same 3 / pool-size chance of appearing as a distractor.
+  const distractors = shuffle(createDistractorPool(country), random).slice(0, 3);
   if (distractors.length !== 3) throw new Error("서로 다른 수도 선택지 4개를 만들 수 없습니다.");
-  return shuffle([country.capitalKo, ...distractors]);
+  // A separate Fisher-Yates pass gives the correct answer and distractors an
+  // equal 1 / 4 chance of occupying each answer position.
+  return shuffle([country.capitalKo, ...distractors], random);
 }
 
 function updateProgress(completed) {

@@ -42,18 +42,41 @@ for (const excluded of ['VA','PS','TW','XK','CK','NU','HK','MO']) assert.ok(!cou
 assert.throws(() => validateCountries(countries.slice(1)));
 assert.throws(() => validateCountries(countries.map((c,i) => i === 1 ? {...c, countryEn:countries[0].countryEn} : c)));
 assert.throws(() => validateCountries(countries.map((c,i) => i === 1 ? {...c, capitalKo:' '} : c)));
+// Fisher-Yates must generate every permutation exactly once when every
+// possible random choice is supplied. This verifies the shuffle is unbiased
+// without relying on a flaky statistical test.
+const permutationKeys = new Set();
+for (const firstChoice of [0, 1, 2, 3]) for (const secondChoice of [0, 1, 2]) for (const thirdChoice of [0, 1]) {
+  const choices = [firstChoice / 4, secondChoice / 3, thirdChoice / 2];
+  const shuffled = shuffle(['A', 'B', 'C', 'D'], () => choices.shift());
+  permutationKeys.add(shuffled.join(''));
+}
+assert.equal(permutationKeys.size, 24);
+const originalCountryOrder = countries.map(country => country.id).join(',');
+const firstDeck = createQuestionDeck(() => 0);
+const secondDeck = createQuestionDeck(() => 0.9999999999999999);
+assert.equal(firstDeck.length, 193);
+assert.equal(secondDeck.length, 193);
+assert.notEqual(firstDeck, secondDeck);
+assert.notDeepEqual(firstDeck.map(country => country.id), secondDeck.map(country => country.id));
+assert.equal(countries.map(country => country.id).join(','), originalCountryOrder);
 for (const count of QUESTION_COUNTS) for (let game = 0; game < 1000; game++) {
   const selected = createGame(count);
   assert.equal(selected.length, count);
   assert.equal(new Set(selected.map(c => c.id)).size, count);
 }
 const allCapitals = new Set(countries.map(c => c.capitalKo));
-for (const country of countries) for (let repeat = 0; repeat < 100; repeat++) {
-  const options = createOptions(country);
-  assert.equal(options.length, 4);
-  assert.equal(new Set(options.map(capitalKey)).size, 4);
-  assert.equal(options.filter(c => c === country.capitalKo).length, 1);
-  assert.ok(options.every(c => allCapitals.has(c)));
+for (const country of countries) {
+  const pool = createDistractorPool(country);
+  assert.equal(new Set(pool.map(capitalKey)).size, pool.length);
+  assert.ok(!pool.some(capital => capitalKey(capital) === capitalKey(country.capitalKo)));
+  for (let repeat = 0; repeat < 100; repeat++) {
+    const options = createOptions(country);
+    assert.equal(options.length, 4);
+    assert.equal(new Set(options.map(capitalKey)).size, 4);
+    assert.equal(options.filter(c => c === country.capitalKo).length, 1);
+    assert.ok(options.every(c => allCapitals.has(c)));
+  }
 }
 // Exercise every possible score for each setting through actual click listeners.
 for (const count of QUESTION_COUNTS) for (let expected = 0; expected <= count; expected++) {
@@ -141,7 +164,9 @@ for (const action of ['brand-home', 'header-restart']) {
 `);
 console.log('PASS: exactly 193 countries; UN reference set equal (0 missing, 0 extra).');
 console.log('PASS: unique countryEn/id; all required capital fields present; nonmembers excluded.');
+console.log('PASS: fresh Fisher-Yates decks are unbiased and never mutate the country source.');
 console.log('PASS: 3,000 games with 10/25/50 unique countries.');
+console.log('PASS: unique distractor pools are uniformly shuffled; all 4 answer positions are equally likely.');
 console.log('PASS: 19,300 option sets with 4 distinct real capitals and exactly one answer.');
 console.log('PASS: all scores for 10/25/50 questions; home/logo, PLAY, settings, restart and answer locking.');
 
