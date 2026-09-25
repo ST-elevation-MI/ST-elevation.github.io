@@ -127,10 +127,22 @@ for (const count of QUESTION_COUNTS) for (let expected = 0; expected <= count; e
   assert.equal($('percentage').textContent, Math.round(expected / count * 100) + '%');
   const message = expected === count ? '완벽합니다!' : expected / count >= 0.8 ? '훌륭합니다!' : expected / count >= 0.5 ? '잘했습니다!' : '조금 더 연습해봅시다!';
   assert.equal($('result-message').textContent, message);
+  assert.equal(mistakes.length, count - expected);
+  assert.equal($('mistake-list').children.length, count - expected);
+  assert.equal($('perfect-review').hidden, expected !== count);
+  for (let index = 0; index < mistakes.length; index++) {
+    const mistake = mistakes[index];
+    const item = $('mistake-list').children[index];
+    assert.equal(item.children[0].textContent, mistake.countryKo);
+    assert.equal(item.children[1].textContent, '내 답: ' + mistake.selectedCapitalKo);
+    assert.equal(item.children[2].textContent, '정답: ' + mistake.correctCapitalKo);
+    assert.notEqual(mistake.selectedCapitalKo, mistake.correctCapitalKo);
+  }
 }
 $('result-restart').click();
 assert.equal(score, 0);
 assert.equal(current, 0);
+assert.equal(mistakes.length, 0);
 assert.equal($('result-screen').hidden, true);
 assert.equal($('answers').children.length, 4);
 assert.ok([...$('answers').children].every(b => !b.disabled));
@@ -171,3 +183,4 @@ console.log('PASS: 19,300 option sets with 4 distinct real capitals and exactly 
 console.log('PASS: all scores for 10/25/50 questions; home/logo, PLAY, settings, restart and answer locking.');
 
 console.log('PASS: correct answers auto-advance (including final result), wrong answers wait, pending timers cancel on home/restart.');
+console.log('PASS: result review lists every wrong choice with its correct answer and handles perfect scores.');

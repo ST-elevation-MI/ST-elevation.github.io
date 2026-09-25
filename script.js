@@ -8,6 +8,7 @@ const $ = (id) => document.getElementById(id);
 let questions = [];
 let current = 0;
 let score = 0;
+let mistakes = [];
 let answered = false;
 let advanceTimer = null;
 const AUTO_ADVANCE_DELAY = 900;
@@ -89,6 +90,7 @@ function showHome(focus = true) {
   questions = [];
   current = 0;
   score = 0;
+  mistakes = [];
   answered = false;
   $("home-screen").hidden = false;
   $("game-screen").hidden = true;
@@ -110,6 +112,7 @@ function startQuiz(focus = true) {
   $("journey-label").textContent = `지구 한 바퀴, ${total}개의 질문`;
   current = 0;
   score = 0;
+  mistakes = [];
   $("result-screen").hidden = true;
   $("question-screen").hidden = false;
   renderQuestion(focus);
@@ -156,6 +159,11 @@ function selectAnswer(selected, capital) {
   answered = true;
   const correct = selected.dataset.capital === capital;
   if (correct) score++;
+  else mistakes.push({
+    countryKo: questions[current].countryKo,
+    selectedCapitalKo: selected.dataset.capital,
+    correctCapitalKo: capital
+  });
   for (const button of $("answers").children) {
     button.disabled = true;
     if (button.dataset.capital === capital) {
@@ -194,6 +202,22 @@ function showResults() {
   $("result-score").textContent = score;
   $("percentage").textContent = `${Math.round(score / total * 100)}%`;
   $("result-message").textContent = score === total ? "완벽합니다!" : score / total >= 0.8 ? "훌륭합니다!" : score / total >= 0.5 ? "잘했습니다!" : "조금 더 연습해봅시다!";
+  $("mistake-list").replaceChildren();
+  $("perfect-review").hidden = mistakes.length !== 0;
+  for (const mistake of mistakes) {
+    const item = document.createElement("li");
+    item.className = "mistake-item";
+    const country = document.createElement("strong");
+    country.textContent = mistake.countryKo;
+    const selectedAnswer = document.createElement("span");
+    selectedAnswer.className = "mistake-selected";
+    selectedAnswer.textContent = `내 답: ${mistake.selectedCapitalKo}`;
+    const correctAnswer = document.createElement("span");
+    correctAnswer.className = "mistake-correct";
+    correctAnswer.textContent = `정답: ${mistake.correctCapitalKo}`;
+    item.append(country, selectedAnswer, correctAnswer);
+    $("mistake-list").append(item);
+  }
   $("result-message").focus();
 }
 function advanceQuestion() {

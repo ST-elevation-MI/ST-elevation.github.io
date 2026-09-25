@@ -29,3 +29,37 @@
   .count-option small { font-size: 10px; }
   .play-button { min-width: 0; }
 }
+
+.mistake-review {
+  max-width: 650px;
+  margin: 0 auto 26px;
+  padding: 22px;
+  background: #f5faf8;
+  border: 1px solid #c8ded9;
+  border-radius: 7px;
+  text-align: left;
+}
+.mistake-review h3 { margin: 0 0 14px; font-size: 18px; color: var(--ink); }
+#perfect-review { margin: 0; text-align: center; color: #28734f; font-weight: 700; }
+#mistake-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.mistake-item {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 13px 15px;
+  background: #fff;
+  border: 1px solid #d7e8e2;
+  border-left: 4px solid #c4504d;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.mistake-item strong, .mistake-item span { overflow-wrap: anywhere; }
+.mistake-item strong { color: var(--ink); }
+.mistake-selected { color: #a33636; }
+.mistake-correct { color: #23704b; font-weight: 700; }
+
+@media (max-width: 680px) {
+  .mistake-review { padding: 17px 14px; }
+  .mistake-item { grid-template-columns: 1fr; gap: 5px; }
+}
