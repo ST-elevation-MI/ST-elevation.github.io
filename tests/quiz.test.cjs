@@ -25,7 +25,7 @@ function flushTimers() {
 }
 const context = vm.createContext({
   setTimeout(callback, delay) { assert.equal(delay, 900); timers.set(++timerId, callback); return timerId; },
-  clearTimeout(id) { timers.delete(id); }, timers, flushTimers, document: { getElementById: id => elements.get(id), createElement: () => new Element() }, console, assert });
+  clearTimeout(id) { timers.delete(id); }, timers, flushTimers, document: { documentElement: { lang: '' }, title: '', getElementById: id => elements.get(id), createElement: () => new Element() }, console, assert });
 for (const filename of ['countries.js', 'script.js']) vm.runInContext(fs.readFileSync(path.join(root, filename), 'utf8'), context, { filename });
 const run = code => vm.runInContext(code, context);
 context.reference = JSON.parse(fs.readFileSync(path.join(__dirname, 'un-members.json'), 'utf8')).names;
@@ -37,11 +37,45 @@ assert.equal(countries.length, 193);
 assert.equal(new Set(countries.map(c => c.countryEn)).size, 193);
 assert.equal(new Set(countries.map(c => c.id)).size, 193);
 assert.deepEqual([...countries.map(c => c.countryEn)].sort(), [...reference].sort());
-assert.ok(countries.every(c => c.capitalKo.trim() && c.capitalEn.trim()));
+assert.ok(countries.every(c => c.countryJa.trim() && c.capitalKo.trim() && c.capitalEn.trim() && c.capitalJa.trim()));
 for (const excluded of ['VA','PS','TW','XK','CK','NU','HK','MO']) assert.ok(!countries.some(c => c.id === excluded));
 assert.throws(() => validateCountries(countries.slice(1)));
 assert.throws(() => validateCountries(countries.map((c,i) => i === 1 ? {...c, countryEn:countries[0].countryEn} : c)));
 assert.throws(() => validateCountries(countries.map((c,i) => i === 1 ? {...c, capitalKo:' '} : c)));
+assert.equal(document.documentElement.lang, 'ko');
+assert.equal($('language-select').value, 'ko');
+$('language-select').value = 'ja';
+$('language-select').listeners.change({ target: $('language-select') });
+assert.equal(language, 'ja');
+assert.equal(document.documentElement.lang, 'ja');
+assert.equal($('home-title').textContent, 'どこまで挑戦しますか？');
+assert.equal(countryName(countries[0]), countries[0].countryJa);
+assert.ok(createOptions(countries[0]).every(name => countries.some(country => country.capitalJa === name)));
+$('language-select').value = 'en';
+$('language-select').listeners.change({ target: $('language-select') });
+assert.equal(language, 'en');
+assert.equal(document.documentElement.lang, 'en');
+assert.equal($('question-count-legend').textContent, 'Number of questions');
+assert.equal(countryName(countries[0]), countries[0].countryEn);
+assert.ok(createOptions(countries[0]).every(name => countries.some(country => country.capitalEn === name)));
+setLanguage('ko');
+assert.equal(language, 'ko');
+for (const lang of ['ja', 'en']) {
+  setLanguage(lang);
+  startQuiz(false);
+  const country = questions[0];
+  const expectedCountry = lang === 'ja' ? country.countryJa : country.countryEn;
+  const capitalField = lang === 'ja' ? 'capitalJa' : 'capitalEn';
+  assert.equal($('country').textContent, expectedCountry);
+  assert.ok([...$('answers').children].every(button => countries.some(item => item[capitalField] === button.dataset.capital)));
+  const correct = country[capitalField];
+  const wrong = [...$('answers').children].find(button => button.dataset.capital !== correct);
+  wrong.click();
+  assert.equal(mistakes[0].correctCapitalKo, correct);
+  assert.equal(mistakes[0].countryKo, expectedCountry);
+  showHome(false);
+}
+setLanguage('ko');
 // Fisher-Yates must generate every permutation exactly once when every
 // possible random choice is supplied. This verifies the shuffle is unbiased
 // without relying on a flaky statistical test.
@@ -200,6 +234,7 @@ for (const action of ['brand-home', 'header-restart']) {
 `);
 console.log('PASS: exactly 193 countries; UN reference set equal (0 missing, 0 extra).');
 console.log('PASS: unique countryEn/id; all required capital fields present; nonmembers excluded.');
+console.log('PASS: Korean, Japanese and English UI/country/capital rendering.');
 console.log('PASS: fresh Fisher-Yates decks are unbiased and never mutate the country source.');
 console.log('PASS: 3,000 games with 10/25/50 unique countries.');
 console.log('PASS: unique distractor pools are uniformly shuffled; all 4 answer positions are equally likely.');

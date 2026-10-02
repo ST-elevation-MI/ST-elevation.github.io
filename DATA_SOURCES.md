@@ -16,6 +16,8 @@ Member States 웹페이지는 검색으로 확인했으나 본문 직접 다운�
 
 수도 교차 확인 참고: UNGEGN 지명 데이터 안내 https://unstats.un.org/unsd/geoinfo/geonames/About.htm 및 미국 국무부 국가·수도 표 https://2021-2025.state.gov/independent-states-in-the-world/ . UN 회원국 목록 자체는 수도의 출처가 아닙니다. 한국어 표기는 퀴즈용으로 작성했습니다.
 
+일본어 국가명과 수도명은 2026-10-02 Wikidata의 ISO 3166-1 코드(P297), 수도(P36), 일본어 레이블을 대조해 추가했습니다. 복수 수도가 반환되는 국가는 아래의 퀴즈 정답 기준과 일치하는 항목을 선택했으며, 조회에서 누락된 덴마크와 루마니아는 각각 デンマーク/コペンハーゲン, ルーマニア/ブカレスト로 보완했습니다. Wikidata Query Service: https://query.wikidata.org/
+
 - 적도기니: 2026-01-02 정부 발표에 따라 Ciudad de la Paz / 시우다드데라파스. https://www.guineaecuatorialpress.com/noticias/el_presidente_de_la_republica_proclama_la_ciudad_de_la_paz_como_capital_de_la_republica_de_guinea_ecuatorial_con_la_firma_de_un_decreto_ley
 - 인도네시아: 자카르타. 2026-05-12 헌법재판소는 수도 이전 대통령령 발효 전 자카르타의 지위를 확인했습니다. 이전 발효 시 갱신이 필요합니다. https://www.mkri.id/public/content/persidangan/putusan/putusan_mkri_14254_1778573044.pdf
 - 나우루: 공식 수도가 없어 정부 소재지인 야렌을 출제하며 문제에 구분을 명시합니다. https://cove.army.gov.au/article/kyr-nauru-information

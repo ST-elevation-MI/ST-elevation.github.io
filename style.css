@@ -7,6 +7,9 @@
 .home-icon { display: inline-block; color: #24866f; font-size: 54px; line-height: 1; }
 .home-body h2 { margin: 18px 0 12px; font-size: 30px; letter-spacing: -1px; }
 .home-description { color: #52737d; font-size: 14px; line-height: 1.7; }
+.language-control { display: inline-flex; align-items: center; gap: 10px; margin-top: 15px; color: #376274; font-size: 13px; font-weight: 700; }
+.language-control select { min-width: 130px; padding: 9px 34px 9px 12px; color: var(--ink); background: #fff; border: 1px solid #9fc7c5; border-radius: 5px; font: inherit; cursor: pointer; }
+.language-control select:focus-visible { outline: 3px solid #e7a825; outline-offset: 3px; }
 .question-settings { border: 0; padding: 0; margin: 28px 0 0; min-width: 0; }
 .question-settings legend { margin: 0 auto 15px; font-size: 14px; font-weight: 700; }
 .count-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
