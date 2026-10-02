@@ -174,7 +174,7 @@ const countries = [
     "countryJa": "ベルギー",
     "capitalKo": "브뤼셀",
     "capitalEn": "Brussels",
-    "capitalJa": "ブリュッセル市",
+    "capitalJa": "ブリュッセル",
     "continent": "Europe"
   },
   {
@@ -368,7 +368,7 @@ const countries = [
     "countryJa": "中華人民共和国",
     "capitalKo": "베이징",
     "capitalEn": "Beijing",
-    "capitalJa": "北京市",
+    "capitalJa": "北京",
     "continent": "Asia"
   },
   {
@@ -468,7 +468,7 @@ const countries = [
     "countryJa": "朝鮮民主主義人民共和国",
     "capitalKo": "평양",
     "capitalEn": "Pyongyang",
-    "capitalJa": "平壌市",
+    "capitalJa": "平壌",
     "continent": "Asia"
   },
   {
@@ -498,7 +498,7 @@ const countries = [
     "countryJa": "ジブチ",
     "capitalKo": "지부티",
     "capitalEn": "Djibouti",
-    "capitalJa": "ジブチ市",
+    "capitalJa": "ジブチ",
     "continent": "Africa"
   },
   {
@@ -558,7 +558,7 @@ const countries = [
     "countryJa": "赤道ギニア",
     "capitalKo": "시우다드데라파스",
     "capitalEn": "Ciudad de la Paz",
-    "capitalJa": "ラパス",
+    "capitalJa": "シウダー・デ・ラ・パス",
     "continent": "Africa",
     "capitalQualifierKo": "수도",
     "capitalNoteKo": "2026년 1월 수도를 말라보에서 시우다드데라파스로 변경했습니다."
@@ -875,7 +875,7 @@ const countries = [
     "countryJa": "日本",
     "capitalKo": "도쿄",
     "capitalEn": "Tokyo",
-    "capitalJa": "東京都",
+    "capitalJa": "東京",
     "continent": "Asia"
   },
   {
@@ -925,7 +925,7 @@ const countries = [
     "countryJa": "クウェート",
     "capitalKo": "쿠웨이트시티",
     "capitalEn": "Kuwait City",
-    "capitalJa": "クウェート市",
+    "capitalJa": "クウェート",
     "continent": "Asia"
   },
   {
@@ -1025,7 +1025,7 @@ const countries = [
     "countryJa": "ルクセンブルク",
     "capitalKo": "룩셈부르크",
     "capitalEn": "Luxembourg",
-    "capitalJa": "ルクセンブルク市",
+    "capitalJa": "ルクセンブルク",
     "continent": "Europe"
   },
   {
@@ -1217,7 +1217,7 @@ const countries = [
     "countryJa": "ナウル",
     "capitalKo": "야렌",
     "capitalEn": "Yaren",
-    "capitalJa": "ヤレン地区",
+    "capitalJa": "ヤレン",
     "continent": "Oceania",
     "capitalQualifierKo": "정부 소재지",
     "capitalNoteKo": "공식 수도가 없는 나라로, 야렌에 정부 기관이 있습니다."
@@ -1341,7 +1341,7 @@ const countries = [
     "countryJa": "パナマ",
     "capitalKo": "파나마시티",
     "capitalEn": "Panama City",
-    "capitalJa": "パナマ市",
+    "capitalJa": "パナマシティ",
     "continent": "North America"
   },
   {
@@ -1421,7 +1421,7 @@ const countries = [
     "countryJa": "大韓民国",
     "capitalKo": "서울",
     "capitalEn": "Seoul",
-    "capitalJa": "ソウル特別市",
+    "capitalJa": "ソウル",
     "continent": "Asia"
   },
   {
@@ -1511,7 +1511,7 @@ const countries = [
     "countryJa": "サンマリノ",
     "capitalKo": "산마리노",
     "capitalEn": "San Marino",
-    "capitalJa": "サンマリノ市",
+    "capitalJa": "サンマリノ",
     "continent": "Europe"
   },
   {
@@ -1817,7 +1817,7 @@ const countries = [
     "countryJa": "ツバル",
     "capitalKo": "푸나푸티",
     "capitalEn": "Funafuti",
-    "capitalJa": "フナフティ島",
+    "capitalJa": "フナフティ",
     "continent": "Oceania"
   },
   {
