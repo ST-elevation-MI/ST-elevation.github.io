@@ -8,7 +8,7 @@ GitHub Pages에는 선택한 정적 파일만 올라갑니다. 방문자가 이 
 
 ## 적용한 보호 조치
 
-- scripts/build-site.cjs가 index.html, style.css, countries.js, script.js만 _site에 복사합니다. 테스트·문서·설정·다른 파일은 사이트에 배포되지 않습니다. 심볼릭 링크와 남은 빌드 파일이 있으면 중단합니다.
+- scripts/build-site.cjs가 공용 style.css, countries.js, quiz-types.js, quiz-engine.js, script.js와 언어별 허브 및 퀴즈 유형 페이지, robots.txt, sitemap.xml만 _site에 생성합니다. 테스트·문서·설정·다른 파일은 사이트에 배포되지 않습니다. 심볼릭 링크와 남은 빌드 파일이 있으면 중단합니다.
 - CSP: 같은 출처의 JS/CSS만 허용하고 외부 통신, 플러그인, 폼 전송을 차단합니다. 인라인 스크립트와 eval은 허용하지 않습니다.
 - Referrer 정책: 다른 페이지에 현재 주소를 보내지 않습니다.
 - .gitignore: 환경변수·키·로컬 설정 파일 등이 실수로 새 커밋에 들어가는 것을 줄입니다. 이미 추적된 파일이나 이력에서 비밀을 삭제해 주지는 않습니다.
@@ -41,6 +41,8 @@ node scripts/build-site.cjs
 ```
 
 _site가 이미 있으면 내용을 검토하고 이전 빌드 폴더를 삭제한 다음 다시 빌드합니다. GitHub Actions는 매번 새 체크아웃에서 빌드합니다.
+
+`SITE_URL`은 canonical, hreflang, sitemap 주소의 기준입니다. 현재 GitHub Pages 주소가 워크플로에 설정되어 있습니다. 사용자 지정 도메인을 연결하면 `.github/workflows/pages.yml`의 `SITE_URL`도 `https://www.example.com`처럼 실제 공개 주소로 변경해야 합니다.
 
 공식 문서:
 - https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages

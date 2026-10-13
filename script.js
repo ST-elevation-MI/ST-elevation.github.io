@@ -7,7 +7,7 @@ const TEXT = {
     title: "WORLD CAPITAL QUIZ · 세계 수도 퀴즈", brandHome: "WORLD CAPITAL QUIZ 홈", mainMenu: "메인 메뉴", home: "홈", restart: "다시 시작", score: "점수", menu: "메뉴",
     introAria: "퀴즈 소개", introEyebrow: "작은 도전, 넓어지는 세계", introTitle: "수도를 맞히며, 세계 한 바퀴!", introCopy: "나라 이름을 보고 알맞은 수도를 골라보세요.",
     instructionsTitle: "게임 안내", instructionsCopy: "선택한 문제 수만큼 무작위로 뽑은 나라의 수도를 맞혀보세요. 정답마다 1점을 얻습니다. 선택 후에는 답을 바꿀 수 없어요. 정답이면 자동으로 다음 문제로 넘어가며, 오답이면 해설을 확인한 뒤 다음 문제 버튼을 눌러주세요.", instructionsAccessibility: "키보드의 Tab과 Enter로도 모든 버튼을 사용할 수 있습니다.",
-    homeMode: "나만의 세계 여행", setupRound: "게임 설정", homeTitle: "어디까지 도전해볼까요?", homeDescription: "UN 회원국 193개국 중 새로운 나라들을 만나보세요.", language: "언어", questionCountLegend: "출제 문제 수", questionUnit: "문제", count10Tip: "가볍게 시작", count25Tip: "조금 더 멀리", count50Tip: "세계 탐험 도전", homeTip: "시간 제한 없이, 나만의 속도로 즐겨보세요.",
+    homeMode: "나만의 세계 여행", setupRound: "게임 설정", homeTitle: "어디까지 도전해볼까요?", homeDescription: "UN 회원국 193개국 중 새로운 나라들을 만나보세요.", language: "언어", quizTypeLegend: "퀴즈 유형", scopeLegend: "출제 범위", scopeAll: "전 세계 193개국", questionCountLegend: "출제 문제 수", questionUnit: "문제", count10Tip: "가볍게 시작", count25Tip: "조금 더 멀리", count50Tip: "세계 탐험 도전", homeTip: "시간 제한 없이, 나만의 속도로 즐겨보세요.",
     gameAria: "세계 수도 퀴즈", gameMode: "세계 수도 도전", progressLabel: "완료한 문제", questionRound: "세계의 수도", questionHint: "아래에서 정답 하나를 선택하세요", answersLabel: "수도 선택지",
     resultRound: "퀴즈 완료!", resultCopy: "세상을 알아가는 여행, 한 번 더 떠나볼까요?", mistakeReview: "오답 복습", perfectReview: "모든 문제를 맞혔어요. 복습할 오답이 없습니다!", gameBottomCopy: "배우는 즐거움, 발견하는 재미 ✦", countryCountCopy: "UN 회원국 193개국을 만나는 여행", freshQuestions: "매번 새로운 문제", noTimeLimit: "시간 제한 없이 천천히", footer: "세계를 탐험하세요. 한 번에 하나의 수도씩.",
     setupSummary: (count) => `${count}개의 나라, ${count}개의 질문이 기다리고 있어요.`, journey: (count) => `지구 한 바퀴, ${count}개의 질문`, questionCount: (index, total) => `문제 ${index} / ${total}`, questionTitle: (qualifier) => qualifier ? `이 나라의 ${qualifier}는?` : "이 나라의 수도는?", ready: "준비되셨나요? 세계 여행을 시작해요!", next: "다음 문제 →", results: "결과 보기 →", correct: "정답입니다! 멋지게 맞혔어요.", wrong: (answer) => `오답입니다. 정답은 ${answer}입니다.`, correctAdvance: "정답입니다! 잠시 후 다음 문제로 넘어갑니다.", correctResult: "정답입니다! 잠시 후 결과를 확인하세요.", completed: (total) => `${total}문제 완료`, perfect: "완벽합니다!", great: "훌륭합니다!", good: "잘했습니다!", practice: "조금 더 연습해봅시다!", reviewAria: (country) => `${country} 오답 문제 다시 보기`, myAnswer: (answer) => `내 답: ${answer}`, correctAnswer: (answer) => `정답: ${answer}`, reviewCount: (index, total) => `오답 복습 ${index} / ${total}`, reviewFeedback: (selected, correct) => `내 답은 ${selected}, 정답은 ${correct}입니다.`, backResults: "결과로 돌아가기 →", correctAria: (answer) => `${answer}, 정답`, wrongAria: (answer) => `${answer}, 오답`, selectedWrongAria: (answer) => `${answer}, 내가 선택한 오답`
@@ -16,7 +16,7 @@ const TEXT = {
     title: "WORLD CAPITAL QUIZ · 世界の首都クイズ", brandHome: "WORLD CAPITAL QUIZ ホーム", mainMenu: "メインメニュー", home: "ホーム", restart: "もう一度", score: "スコア", menu: "メニュー",
     introAria: "クイズ紹介", introEyebrow: "小さな挑戦、広がる世界", introTitle: "首都を当てて、世界を一周！", introCopy: "国名を見て、正しい首都を選びましょう。",
     instructionsTitle: "遊び方", instructionsCopy: "選んだ問題数だけ国がランダムに出題されます。正解すると1点です。一度選んだ答えは変更できません。正解時は自動で次へ進み、不正解時は解説を確認してから次の問題へ進みます。", instructionsAccessibility: "TabキーとEnterキーでも、すべてのボタンを操作できます。",
-    homeMode: "自分だけの世界旅行", setupRound: "ゲーム設定", homeTitle: "どこまで挑戦しますか？", homeDescription: "国連加盟国193か国から、新しい国々に出会いましょう。", language: "言語", questionCountLegend: "問題数", questionUnit: "問", count10Tip: "気軽にスタート", count25Tip: "もう少し遠くへ", count50Tip: "世界探検に挑戦", homeTip: "制限時間はありません。自分のペースで楽しみましょう。",
+    homeMode: "自分だけの世界旅行", setupRound: "ゲーム設定", homeTitle: "どこまで挑戦しますか？", homeDescription: "国連加盟国193か国から、新しい国々に出会いましょう。", language: "言語", quizTypeLegend: "クイズタイプ", scopeLegend: "出題範囲", scopeAll: "世界193か国", questionCountLegend: "問題数", questionUnit: "問", count10Tip: "気軽にスタート", count25Tip: "もう少し遠くへ", count50Tip: "世界探検に挑戦", homeTip: "制限時間はありません。自分のペースで楽しみましょう。",
     gameAria: "世界の首都クイズ", gameMode: "世界の首都チャレンジ", progressLabel: "完了した問題", questionRound: "世界の首都", questionHint: "正しい答えを1つ選んでください", answersLabel: "首都の選択肢",
     resultRound: "クイズ完了！", resultCopy: "世界を知る旅に、もう一度出かけませんか？", mistakeReview: "間違いを復習", perfectReview: "全問正解です。復習する間違いはありません！", gameBottomCopy: "学ぶ喜び、発見する楽しさ ✦", countryCountCopy: "国連加盟国193か国を巡る旅", freshQuestions: "毎回新しい問題", noTimeLimit: "時間制限なし", footer: "世界を探検しよう。一度に一つの首都から。",
     setupSummary: (count) => `${count}か国、${count}問が待っています。`, journey: (count) => `世界一周、${count}問`, questionCount: (index, total) => `第${index}問 / ${total}`, questionTitle: (qualifier) => qualifier ? `この国の${qualifier}は？` : "この国の首都は？", ready: "準備はできましたか？ 世界旅行を始めましょう！", next: "次の問題 →", results: "結果を見る →", correct: "正解です！ お見事です。", wrong: (answer) => `不正解です。正解は${answer}です。`, correctAdvance: "正解です！ まもなく次の問題へ進みます。", correctResult: "正解です！ まもなく結果を表示します。", completed: (total) => `${total}問完了`, perfect: "パーフェクト！", great: "素晴らしい！", good: "よくできました！", practice: "もう少し練習してみましょう！", reviewAria: (country) => `${country}の間違えた問題を確認`, myAnswer: (answer) => `あなたの答え：${answer}`, correctAnswer: (answer) => `正解：${answer}`, reviewCount: (index, total) => `間違いの復習 ${index} / ${total}`, reviewFeedback: (selected, correct) => `あなたの答えは${selected}、正解は${correct}です。`, backResults: "結果に戻る →", correctAria: (answer) => `${answer}、正解`, wrongAria: (answer) => `${answer}、不正解`, selectedWrongAria: (answer) => `${answer}、選んだ不正解`
@@ -25,7 +25,7 @@ const TEXT = {
     title: "WORLD CAPITAL QUIZ", brandHome: "WORLD CAPITAL QUIZ home", mainMenu: "Main menu", home: "Home", restart: "Restart", score: "Score", menu: "Menu",
     introAria: "Quiz introduction", introEyebrow: "A small challenge, a wider world", introTitle: "Guess the capitals and travel the world!", introCopy: "Read the country name and choose its capital.",
     instructionsTitle: "How to play", instructionsCopy: "Countries are chosen at random for the number of questions you select. Each correct answer earns one point, and answers cannot be changed after selection. Correct answers advance automatically; after a wrong answer, review the explanation and continue with the Next button.", instructionsAccessibility: "All buttons can also be used with Tab and Enter.",
-    homeMode: "Your world journey", setupRound: "GAME SETUP", homeTitle: "How far will you go?", homeDescription: "Meet new countries among all 193 UN member states.", language: "Language", questionCountLegend: "Number of questions", questionUnit: "questions", count10Tip: "Quick start", count25Tip: "Travel farther", count50Tip: "World explorer", homeTip: "No time limit—enjoy the quiz at your own pace.",
+    homeMode: "Your world journey", setupRound: "GAME SETUP", homeTitle: "How far will you go?", homeDescription: "Meet new countries among all 193 UN member states.", language: "Language", quizTypeLegend: "Quiz type", scopeLegend: "Question scope", scopeAll: "All 193 countries", questionCountLegend: "Number of questions", questionUnit: "questions", count10Tip: "Quick start", count25Tip: "Travel farther", count50Tip: "World explorer", homeTip: "No time limit—enjoy the quiz at your own pace.",
     gameAria: "World capital quiz", gameMode: "World capital challenge", progressLabel: "Questions completed", questionRound: "CAPITALS OF THE WORLD", questionHint: "Choose one correct answer below", answersLabel: "Capital choices",
     resultRound: "QUIZ COMPLETE!", resultCopy: "Ready to take another journey around the world?", mistakeReview: "Review mistakes", perfectReview: "You got every question right. There are no mistakes to review!", gameBottomCopy: "The joy of learning and discovery ✦", countryCountCopy: "A journey through 193 UN member states", freshQuestions: "New questions every game", noTimeLimit: "No time limit", footer: "EXPLORE THE WORLD. ONE CAPITAL AT A TIME.",
     setupSummary: (count) => `${count} countries and ${count} questions are waiting.`, journey: (count) => `Around the world in ${count} questions`, questionCount: (index, total) => `Question ${index} / ${total}`, questionTitle: (qualifier) => qualifier ? `What is this country's ${qualifier}?` : "What is this country's capital?", ready: "Ready? Let's begin our journey around the world!", next: "Next question →", results: "View results →", correct: "Correct! Great job.", wrong: (answer) => `Not quite. The correct answer is ${answer}.`, correctAdvance: "Correct! Moving to the next question shortly.", correctResult: "Correct! Your results will appear shortly.", completed: (total) => `${total} questions completed`, perfect: "Perfect!", great: "Excellent!", good: "Well done!", practice: "Keep practicing!", reviewAria: (country) => `Review the missed question for ${country}`, myAnswer: (answer) => `Your answer: ${answer}`, correctAnswer: (answer) => `Correct answer: ${answer}`, reviewCount: (index, total) => `Mistake review ${index} / ${total}`, reviewFeedback: (selected, correct) => `Your answer was ${selected}; the correct answer is ${correct}.`, backResults: "Back to results →", correctAria: (answer) => `${answer}, correct`, wrongAria: (answer) => `${answer}, incorrect`, selectedWrongAria: (answer) => `${answer}, your incorrect choice`
@@ -48,9 +48,14 @@ const CAPITAL_CONTEXT = {
 };
 
 let selectedCount = 10;
+const presetQuizType = document.body?.dataset?.quizType;
+const presetContinent = document.body?.dataset?.continent;
+let selectedQuizType = QUIZ_TYPE_IDS.includes(presetQuizType) ? presetQuizType : "country-to-capital";
+const activeContinent = CONTINENT_IDS.includes(presetContinent) ? presetContinent : null;
+let activeQuizType = selectedQuizType;
 let total = 10;
 let screen = "home";
-let language = "ko";
+let language = SUPPORTED_LANGUAGES.includes(document.documentElement.lang) ? document.documentElement.lang : "ko";
 const $ = (id) => document.getElementById(id);
 let questions = [];
 let current = 0;
@@ -77,28 +82,66 @@ function capitalContext(country, index) {
   return CAPITAL_CONTEXT[country.id]?.[language]?.[index] || "";
 }
 
+function typeSubjectAria(country) {
+  return QUIZ_TYPES[activeQuizType].subjectAria(country, language);
+}
+
+function currentPool() {
+  return activeContinent ? countries.filter((country) => country.continent === activeContinent) : countries;
+}
+
+function scopeName() {
+  return activeContinent ? CONTINENT_NAMES[activeContinent][language] : tr("scopeAll");
+}
+
 function applyLanguage() {
   document.documentElement.lang = language;
-  document.title = tr("title");
+  const isQuizPage = document.body?.dataset?.pageKind === "quiz";
+  if (!isQuizPage) document.title = tr("title");
   const staticText = {
     "nav-home": "home", "header-restart-label": "restart", "header-score-label": "score", "menu-label": "menu",
-    "intro-eyebrow": "introEyebrow", "intro-title": "introTitle", "intro-copy": "introCopy",
+    "intro-eyebrow": "introEyebrow",
     "instructions-title": "instructionsTitle", "instructions-copy": "instructionsCopy", "instructions-accessibility": "instructionsAccessibility",
-    "home-mode-label": "homeMode", "setup-round-label": "setupRound", "home-title": "homeTitle", "home-description": "homeDescription", "language-label": "language", "question-count-legend": "questionCountLegend",
+    "home-mode-label": "homeMode", "setup-round-label": "setupRound", "language-label": "language", "quiz-type-legend": "quizTypeLegend", "scope-legend": "scopeLegend", "scope-all": "scopeAll", "question-count-legend": "questionCountLegend",
     "count-unit-10": "questionUnit", "count-unit-25": "questionUnit", "count-unit-50": "questionUnit", "count-tip-10": "count10Tip", "count-tip-25": "count25Tip", "count-tip-50": "count50Tip", "home-tip": "homeTip",
     "game-mode-label": "gameMode", "score-label": "score", "question-round-label": "questionRound", "question-hint": "questionHint",
     "result-round-label": "resultRound", "result-copy": "resultCopy", "mistake-review-title": "mistakeReview", "perfect-review": "perfectReview", "result-restart-label": "restart",
     "game-bottom-copy": "gameBottomCopy", "country-count-copy": "countryCountCopy", "fresh-questions-copy": "freshQuestions", "no-time-limit-copy": "noTimeLimit", "page-footer": "footer"
   };
+  if (!isQuizPage) Object.assign(staticText, { "intro-title": "introTitle", "intro-copy": "introCopy", "home-title": "homeTitle", "home-description": "homeDescription" });
   for (const [id, key] of Object.entries(staticText)) $(id).textContent = tr(key);
+  if (isQuizPage) $("instructions-copy").textContent = QUIZ_TYPES[selectedQuizType].instructions[language];
+  for (const typeId of QUIZ_TYPE_IDS) {
+    $(`type-name-${typeId}`).textContent = QUIZ_TYPES[typeId].name[language];
+    $(`type-tip-${typeId}`).textContent = QUIZ_TYPES[typeId].description[language];
+    const typeLink = $(`type-${typeId}`);
+    if (document.body?.dataset?.pageKind === "quiz" && typeId === selectedQuizType) typeLink.setAttribute("aria-current", "page");
+    else typeLink.removeAttribute("aria-current");
+  }
+  for (const continent of CONTINENT_IDS) {
+    const scopeLink = $(`scope-${CONTINENT_SLUGS[continent]}`);
+    scopeLink.textContent = CONTINENT_NAMES[continent][language];
+    if (continent === activeContinent) scopeLink.setAttribute("aria-current", "page");
+    else scopeLink.removeAttribute("aria-current");
+  }
+  if (activeContinent) $("scope-all").removeAttribute("aria-current");
+  else if (isQuizPage) $("scope-all").setAttribute("aria-current", "page");
   $("language-select").value = language;
   $("brand-home").setAttribute("aria-label", tr("brandHome"));
   $("main-nav").setAttribute("aria-label", tr("mainMenu"));
   $("intro").setAttribute("aria-label", tr("introAria"));
-  $("game-screen").setAttribute("aria-label", tr("gameAria"));
+  $("game-screen").setAttribute("aria-label", isQuizPage ? QUIZ_TYPES[selectedQuizType].name[language] : tr("gameAria"));
   $("progress").setAttribute("aria-label", tr("progressLabel"));
   $("answers").setAttribute("aria-label", tr("answersLabel"));
+  $("language-links").setAttribute("aria-label", tr("language"));
+  $("scope-options").setAttribute("aria-label", tr("scopeLegend"));
+  for (const code of SUPPORTED_LANGUAGES) {
+    const link = $(`language-link-${code}`);
+    if (code === language) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
+  }
   $("setup-summary").textContent = tr("setupSummary", selectedCount);
+  for (const count of QUESTION_COUNTS) $("count-" + count).disabled = count > currentPool().length;
 }
 
 function setLanguage(nextLanguage) {
@@ -107,57 +150,31 @@ function setLanguage(nextLanguage) {
   applyLanguage();
 }
 
-function shuffle(items, random = Math.random) {
-  const copy = [...items];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
+function shuffle(items, random = Math.random) { return QuizEngine.shuffle(items, random); }
 
-// Every game starts from all 193 countries and creates a fresh Fisher-Yates
-// permutation. Taking the first N entries therefore gives every country the
-// same N / 193 chance of appearing, independently of previous games.
+// Every game starts from the selected scope and creates a fresh Fisher-Yates
+// permutation. Taking the first N entries gives every eligible country the
+// same N / pool-size chance of appearing, independently of previous games.
 function createQuestionDeck(random = Math.random) {
-  return shuffle(countries, random);
+  return QuizEngine.createQuestionDeck(currentPool(), random);
 }
 
 function createGame(count = total) {
-  if (!QUESTION_COUNTS.includes(count)) throw new Error("지원하지 않는 문제 수입니다.");
-  const game = createQuestionDeck().slice(0, count);
-  if (new Set(game.map((country) => country.id)).size !== count) {
-    throw new Error("게임 내 국가가 중복되었습니다.");
-  }
-  return game;
+  const pool = currentPool();
+  return QuizEngine.createGame(pool, count, QUESTION_COUNTS.filter((option) => option <= pool.length));
 }
 function capitalKey(name) {
-  return name.normalize("NFKC").trim().toLocaleLowerCase("en");
+  return QuizEngine.normalize(name);
 }
 
 function createDistractorPool(country) {
-  const seenDisplay = new Set([capitalKey(capitalName(country))]);
-  const seenEn = new Set([capitalKey(country.capitalEn)]);
-  const candidates = [];
-  for (const other of countries) {
-    const display = capitalKey(capitalName(other));
-    const en = capitalKey(other.capitalEn);
-    if (other.id === country.id || seenDisplay.has(display) || seenEn.has(en)) continue;
-    seenDisplay.add(display);
-    seenEn.add(en);
-    candidates.push(capitalName(other));
-  }
-  return candidates;
+  const type = QUIZ_TYPES[screen === "home" ? selectedQuizType : activeQuizType];
+  return QuizEngine.createDistractorPool(country, currentPool(), type, language);
 }
 
 function createOptions(country, random = Math.random) {
-  // Deduplicate first, then shuffle the unique pool. Each eligible capital now
-  // has the same 3 / pool-size chance of appearing as a distractor.
-  const distractors = shuffle(createDistractorPool(country), random).slice(0, 3);
-  if (distractors.length !== 3) throw new Error("서로 다른 수도 선택지 4개를 만들 수 없습니다.");
-  // A separate Fisher-Yates pass gives the correct answer and distractors an
-  // equal 1 / 4 chance of occupying each answer position.
-  return shuffle([capitalName(country), ...distractors], random);
+  const type = QUIZ_TYPES[screen === "home" ? selectedQuizType : activeQuizType];
+  return QuizEngine.createOptions(country, currentPool(), type, language, random);
 }
 
 function updateProgress(completed) {
@@ -167,12 +184,21 @@ function updateProgress(completed) {
   $("progress-fill").style.width = `${completed / total * 100}%`;
 }
 function setQuestionCount(count) {
-  if (!QUESTION_COUNTS.includes(count)) return;
+  if (!QUESTION_COUNTS.includes(count) || count > currentPool().length) return;
   selectedCount = count;
   for (const option of QUESTION_COUNTS) {
     $(`count-${option}`).setAttribute("aria-pressed", String(option === count));
   }
   $("setup-summary").textContent = tr("setupSummary", count);
+}
+function setQuizType(typeId) {
+  if (!QUIZ_TYPE_IDS.includes(typeId) || screen !== "home") return;
+  selectedQuizType = typeId;
+  for (const option of QUIZ_TYPE_IDS) {
+    const typeLink = $(`type-${option}`);
+    if (option === typeId) typeLink.setAttribute("aria-current", "page");
+    else typeLink.removeAttribute("aria-current");
+  }
 }
 function cancelAutoAdvance() {
   clearTimeout(advanceTimer);
@@ -197,6 +223,7 @@ function showHome(focus = true) {
 function startQuiz(focus = true) {
   cancelAutoAdvance();
   total = selectedCount;
+  activeQuizType = selectedQuizType;
   screen = "game";
   questions = createGame();
   $("home-screen").hidden = true;
@@ -204,6 +231,9 @@ function startQuiz(focus = true) {
   $("header-restart").hidden = false;
   $("progress").setAttribute("aria-valuemax", total);
   $("journey-label").textContent = tr("journey", total);
+  $("game-mode-label").textContent = activeContinent ? `${scopeName()} · ${QUIZ_TYPES[activeQuizType].name[language]}` : QUIZ_TYPES[activeQuizType].name[language];
+  $("question-round-label").textContent = QUIZ_TYPES[activeQuizType].round[language];
+  $("answers").setAttribute("aria-label", QUIZ_TYPES[activeQuizType].answersLabel[language]);
   current = 0;
   score = 0;
   mistakes = [];
@@ -214,11 +244,14 @@ function startQuiz(focus = true) {
 function renderQuestion(focus = true) {
   answered = false;
   const country = questions[current];
-  const capital = capitalName(country);
-  const qualifier = capitalContext(country, 0);
+  const type = QUIZ_TYPES[activeQuizType];
+  const correctAnswer = type.answer(country, language);
+  const qualifier = type.showCapitalContext ? capitalContext(country, 0) : "";
   $("question-count").textContent = tr("questionCount", current + 1, total);
-  $("country").textContent = countryName(country);
-  $("question-title").textContent = tr("questionTitle", qualifier);
+  $("country").textContent = type.subject(country, language);
+  $("country").className = type.subjectClass;
+  $("country").setAttribute("aria-label", type.subjectAria(country, language));
+  $("question-title").textContent = qualifier ? tr("questionTitle", qualifier) : type.question[language];
   $("capital-note").hidden = true;
   $("capital-note").textContent = "";
   $("feedback").textContent = tr("ready");
@@ -243,28 +276,40 @@ function renderQuestion(focus = true) {
     mark.className = "mark";
     mark.setAttribute("aria-hidden", "true");
     button.append(number, label, mark);
-    button.addEventListener("click", () => selectAnswer(button, capital));
+    button.addEventListener("click", () => selectAnswer(button, correctAnswer));
     $("answers").append(button);
   });
   updateProgress(current);
   if (focus) $("country").focus();
 }
-function selectAnswer(selected, capital) {
+function selectAnswer(selected, correctAnswer) {
   if (screen !== "game" || answered) return;
   answered = true;
-  const correct = selected.dataset.capital === capital;
+  const correct = QuizEngine.grade(selected.dataset.capital, correctAnswer);
   if (correct) score++;
-  else mistakes.push({
-    questionIndex: current,
-    countryKo: countryName(questions[current]),
-    questionTitle: $("question-title").textContent,
-    options: [...$("answers").children].map((button) => button.dataset.capital),
-    selectedCapitalKo: selected.dataset.capital,
-    correctCapitalKo: capital
-  });
+  else {
+    const baseMistake = QuizEngine.recordMistake({
+      questionIndex: current,
+      subject: $("country").textContent,
+      questionTitle: $("question-title").textContent,
+      options: [...$("answers").children].map((button) => button.dataset.capital),
+      selectedAnswer: selected.dataset.capital,
+      correctAnswer,
+      countryId: questions[current].id
+    });
+    mistakes.push({
+      ...baseMistake,
+      subjectClass: $("country").className,
+      subjectAria: typeSubjectAria(questions[current]),
+      // Backward-compatible field names for existing saved/tested review data.
+      countryKo: baseMistake.subject,
+      selectedCapitalKo: baseMistake.selectedAnswer,
+      correctCapitalKo: baseMistake.correctAnswer
+    });
+  }
   for (const button of $("answers").children) {
     button.disabled = true;
-    if (button.dataset.capital === capital) {
+    if (QuizEngine.grade(button.dataset.capital, correctAnswer)) {
       button.classList.add("correct");
       button.querySelector(".mark").textContent = "✓";
       button.setAttribute("aria-label", tr("correctAria", button.dataset.capital));
@@ -274,9 +319,9 @@ function selectAnswer(selected, capital) {
       button.setAttribute("aria-label", tr("wrongAria", button.dataset.capital));
     } else button.classList.add("muted");
   }
-  $("feedback").textContent = correct ? tr("correct") : tr("wrong", capital);
+  $("feedback").textContent = correct ? tr("correct") : tr("wrong", correctAnswer);
   $("feedback").className = correct ? "success" : "error";
-  const note = capitalContext(questions[current], 1);
+  const note = QUIZ_TYPES[activeQuizType].showCapitalContext ? capitalContext(questions[current], 1) : "";
   $("capital-note").textContent = note || "";
   $("capital-note").hidden = !note;
   $("next").hidden = correct;
@@ -297,8 +342,9 @@ function showResults() {
   $("result-screen").hidden = false;
   $("question-count").textContent = tr("completed", total);
   $("result-total").textContent = `/ ${total}`;
-  $("result-score").textContent = score;
-  $("percentage").textContent = `${Math.round(score / total * 100)}%`;
+  const result = QuizEngine.summarize(score, total);
+  $("result-score").textContent = result.score;
+  $("percentage").textContent = `${result.percentage}%`;
   $("result-message").textContent = score === total ? tr("perfect") : score / total >= 0.8 ? tr("great") : score / total >= 0.5 ? tr("good") : tr("practice");
   $("mistake-list").replaceChildren();
   $("perfect-review").hidden = mistakes.length !== 0;
@@ -308,15 +354,15 @@ function showResults() {
     const reviewButton = document.createElement("button");
     reviewButton.type = "button";
     reviewButton.className = "mistake-button";
-    reviewButton.setAttribute("aria-label", tr("reviewAria", mistake.countryKo));
+    reviewButton.setAttribute("aria-label", tr("reviewAria", mistake.subject));
     const country = document.createElement("strong");
-    country.textContent = mistake.countryKo;
+    country.textContent = mistake.subject;
     const selectedAnswer = document.createElement("span");
     selectedAnswer.className = "mistake-selected";
-    selectedAnswer.textContent = tr("myAnswer", mistake.selectedCapitalKo);
+    selectedAnswer.textContent = tr("myAnswer", mistake.selectedAnswer);
     const correctAnswer = document.createElement("span");
     correctAnswer.className = "mistake-correct";
-    correctAnswer.textContent = tr("correctAnswer", mistake.correctCapitalKo);
+    correctAnswer.textContent = tr("correctAnswer", mistake.correctAnswer);
     reviewButton.append(country, selectedAnswer, correctAnswer);
     reviewButton.addEventListener("click", () => showMistakeReview(mistake));
     item.append(reviewButton);
@@ -330,12 +376,14 @@ function showMistakeReview(mistake) {
   $("result-screen").hidden = true;
   $("question-screen").hidden = false;
   $("question-count").textContent = tr("reviewCount", mistakes.indexOf(mistake) + 1, mistakes.length);
-  $("country").textContent = mistake.countryKo;
+  $("country").textContent = mistake.subject;
+  $("country").className = mistake.subjectClass;
+  $("country").setAttribute("aria-label", mistake.subjectAria);
   $("question-title").textContent = mistake.questionTitle;
-  const note = capitalContext(questions[mistake.questionIndex], 1);
+  const note = QUIZ_TYPES[activeQuizType].showCapitalContext ? capitalContext(questions[mistake.questionIndex], 1) : "";
   $("capital-note").textContent = note || "";
   $("capital-note").hidden = !note;
-  $("feedback").textContent = tr("reviewFeedback", mistake.selectedCapitalKo, mistake.correctCapitalKo);
+  $("feedback").textContent = tr("reviewFeedback", mistake.selectedAnswer, mistake.correctAnswer);
   $("feedback").className = "error";
   $("next").hidden = false;
   $("next").textContent = tr("backResults");
@@ -356,11 +404,11 @@ function showMistakeReview(mistake) {
     const mark = document.createElement("span");
     mark.className = "mark";
     mark.setAttribute("aria-hidden", "true");
-    if (name === mistake.correctCapitalKo) {
+    if (QuizEngine.grade(name, mistake.correctAnswer)) {
       button.classList.add("correct");
       mark.textContent = "✓";
       button.setAttribute("aria-label", tr("correctAria", name));
-    } else if (name === mistake.selectedCapitalKo) {
+    } else if (QuizEngine.grade(name, mistake.selectedAnswer)) {
       button.classList.add("wrong");
       mark.textContent = "✕";
       button.setAttribute("aria-label", tr("selectedWrongAria", name));
@@ -395,13 +443,14 @@ $("menu-toggle").addEventListener("click", () => {
 for (const count of QUESTION_COUNTS) {
   $(`count-${count}`).addEventListener("click", () => setQuestionCount(count));
 }
-$("language-select").addEventListener("change", (event) => setLanguage(event.target.value));
-for (const id of ["brand-home", "nav-home"]) {
-  $(id).addEventListener("click", (event) => {
-    event.preventDefault();
-    showHome();
-  });
-}
+$("language-select").addEventListener("change", (event) => {
+  const nextLanguage = event.target.value;
+  if (typeof window !== "undefined" && /^https?:$/.test(window.location.protocol)) {
+    window.location.assign($(`language-link-${nextLanguage}`).href);
+  } else if (typeof window !== "undefined" && window.location.protocol === "file:") {
+    window.location.assign($(`language-link-${nextLanguage}`).href);
+  } else setLanguage(nextLanguage);
+});
 $("play").addEventListener("click", () => startQuiz());
 applyLanguage();
 showHome(false);

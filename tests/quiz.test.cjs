@@ -8,6 +8,7 @@ class Element {
   append(...children) { this.children.push(...children); }
   replaceChildren(...children) { this.children = children; }
   setAttribute(name, value) { this.attributes[name] = String(value); }
+  removeAttribute(name) { delete this.attributes[name]; }
   addEventListener(name, listener) { this.listeners[name] = listener; }
   querySelector(selector) { return this.children.find(child => child.className === selector.slice(1)); }
   focus() {}
@@ -26,7 +27,7 @@ function flushTimers() {
 const context = vm.createContext({
   setTimeout(callback, delay) { assert.equal(delay, 900); timers.set(++timerId, callback); return timerId; },
   clearTimeout(id) { timers.delete(id); }, timers, flushTimers, document: { documentElement: { lang: '' }, title: '', getElementById: id => elements.get(id), createElement: () => new Element() }, console, assert });
-for (const filename of ['countries.js', 'script.js']) vm.runInContext(fs.readFileSync(path.join(root, filename), 'utf8'), context, { filename });
+for (const filename of ['countries.js', 'quiz-types.js', 'quiz-engine.js', 'script.js']) vm.runInContext(fs.readFileSync(path.join(root, filename), 'utf8'), context, { filename });
 const run = code => vm.runInContext(code, context);
 context.reference = JSON.parse(fs.readFileSync(path.join(__dirname, 'un-members.json'), 'utf8')).names;
 run(`
@@ -44,11 +45,15 @@ assert.throws(() => validateCountries(countries.map((c,i) => i === 1 ? {...c, co
 assert.throws(() => validateCountries(countries.map((c,i) => i === 1 ? {...c, capitalKo:' '} : c)));
 assert.equal(document.documentElement.lang, 'ko');
 assert.equal($('language-select').value, 'ko');
+assert.equal($('language-link-ko').attributes['aria-current'], 'page');
 $('language-select').value = 'ja';
 $('language-select').listeners.change({ target: $('language-select') });
 assert.equal(language, 'ja');
 assert.equal(document.documentElement.lang, 'ja');
+assert.equal($('language-link-ja').attributes['aria-current'], 'page');
+assert.equal($('language-link-ko').attributes['aria-current'], undefined);
 assert.equal($('home-title').textContent, 'どこまで挑戦しますか？');
+assert.equal($('type-name-flag-to-country').textContent, '国旗 → 国');
 assert.equal(countryName(countries[0]), countries[0].countryJa);
 assert.ok(createOptions(countries[0]).every(name => countries.some(country => country.capitalJa === name)));
 $('language-select').value = 'en';
@@ -56,6 +61,7 @@ $('language-select').listeners.change({ target: $('language-select') });
 assert.equal(language, 'en');
 assert.equal(document.documentElement.lang, 'en');
 assert.equal($('question-count-legend').textContent, 'Number of questions');
+assert.equal($('scope-africa').textContent, 'Africa');
 assert.equal(countryName(countries[0]), countries[0].countryEn);
 assert.ok(createOptions(countries[0]).every(name => countries.some(country => country.capitalEn === name)));
 setLanguage('ko');
@@ -76,6 +82,58 @@ for (const lang of ['ja', 'en']) {
   showHome(false);
 }
 setLanguage('ko');
+assert.deepEqual([...QUIZ_TYPE_IDS], ['country-to-capital', 'capital-to-country', 'flag-to-country']);
+assert.equal(QuizEngine.grade('  Asia ', 'asia'), true);
+assert.equal(QuizEngine.grade('Asia', 'Europe'), false);
+assert.equal(QuizEngine.summarize(7, 10).percentage, 70);
+for (const typeId of QUIZ_TYPE_IDS) {
+  showHome(false);
+  setQuizType(typeId);
+  assert.equal(selectedQuizType, typeId);
+  assert.equal($('type-' + typeId).attributes['aria-current'], 'page');
+  const type = QUIZ_TYPES[typeId];
+  for (const country of countries) {
+    const options = createOptions(country);
+    assert.equal(options.length, 4);
+    assert.equal(new Set(options.map(capitalKey)).size, 4);
+    assert.equal(options.filter(option => QuizEngine.grade(option, type.answer(country, language))).length, 1);
+  }
+  startQuiz(false);
+  const country = questions[0];
+  const correct = type.answer(country, language);
+  assert.equal(activeQuizType, typeId);
+  assert.equal($('country').textContent, type.subject(country, language));
+  const qualifier = type.showCapitalContext ? capitalContext(country, 0) : '';
+  assert.equal($('question-title').textContent, qualifier ? tr('questionTitle', qualifier) : type.question[language]);
+  assert.equal($('question-round-label').textContent, type.round[language]);
+  assert.equal($('answers').attributes['aria-label'], type.answersLabel[language]);
+  const wrong = [...$('answers').children].find(button => !QuizEngine.grade(button.dataset.capital, correct));
+  wrong.click();
+  assert.equal(mistakes[0].subject, type.subject(country, language));
+  assert.equal(mistakes[0].selectedAnswer, wrong.dataset.capital);
+  assert.equal(mistakes[0].correctAnswer, correct);
+  assert.equal(mistakes[0].countryId, country.id);
+  $('next').click();
+}
+for (const continent of CONTINENT_IDS) {
+  const continentPool = countries.filter(country => country.continent === continent);
+  assert.ok(continentPool.length >= 10);
+  const practiceGame = QuizEngine.createGame(continentPool, 10, [10]);
+  assert.equal(new Set(practiceGame.map(country => country.id)).size, 10);
+  assert.ok(practiceGame.every(country => country.continent === continent));
+  for (const typeId of QUIZ_TYPE_IDS) {
+    const type = QUIZ_TYPES[typeId];
+    const validAnswers = new Set(continentPool.map(country => type.answer(country, language)));
+    for (const country of practiceGame) {
+      const options = QuizEngine.createOptions(country, continentPool, type, language);
+      assert.equal(options.length, 4);
+      assert.equal(new Set(options.map(capitalKey)).size, 4);
+      assert.ok(options.every(answer => validAnswers.has(answer)));
+    }
+  }
+}
+showHome(false);
+setQuizType('country-to-capital');
 // Fisher-Yates must generate every permutation exactly once when every
 // possible random choice is supplied. This verifies the shuffle is unbiased
 // without relying on a flaky statistical test.
@@ -114,7 +172,7 @@ for (const country of countries) {
 }
 // Exercise every possible score for each setting through actual click listeners.
 for (const count of QUESTION_COUNTS) for (let expected = 0; expected <= count; expected++) {
-  $('brand-home').click();
+  showHome(false);
   assert.equal(screen, 'home');
   $('count-' + count).click();
   assert.equal($('count-' + count).attributes['aria-pressed'], 'true');
@@ -205,7 +263,7 @@ assert.equal($('result-screen').hidden, true);
 assert.equal($('answers').children.length, 4);
 assert.ok([...$('answers').children].every(b => !b.disabled));
 assert.equal(questions.length, 50);
-$('nav-home').click();
+showHome(false);
 assert.equal(screen, 'home');
 assert.equal(score, 0);
 assert.equal(questions.length, 0);
@@ -219,22 +277,25 @@ assert.equal(questions.length, 25);
 assert.equal(current, 0);
 assert.throws(() => createGame(193));
 // Leaving or restarting during correct-answer feedback cancels the pending move.
-for (const action of ['brand-home', 'header-restart']) {
+for (const action of ['home', 'header-restart']) {
   startQuiz(false);
   [...$('answers').children].find(b => b.dataset.capital === questions[0].capitalKo).click();
   assert.equal(timers.size, 1);
-  $(action).click();
+  if (action === 'home') showHome(false);
+  else $(action).click();
   assert.equal(timers.size, 0);
   flushTimers();
   assert.equal(current, 0);
   assert.equal(score, 0);
-  assert.equal(screen, action === 'brand-home' ? 'home' : 'game');
+  assert.equal(screen, action === 'home' ? 'home' : 'game');
 }
 
 `);
 console.log('PASS: exactly 193 countries; UN reference set equal (0 missing, 0 extra).');
 console.log('PASS: unique countryEn/id; all required capital fields present; nonmembers excluded.');
 console.log('PASS: Korean, Japanese and English UI/country/capital rendering.');
+console.log('PASS: shared engine powers country-to-capital, capital-to-country and flag-to-country modes.');
+console.log('PASS: every quiz type supports six continent-limited practice pools and in-continent choices.');
 console.log('PASS: fresh Fisher-Yates decks are unbiased and never mutate the country source.');
 console.log('PASS: 3,000 games with 10/25/50 unique countries.');
 console.log('PASS: unique distractor pools are uniformly shuffled; all 4 answer positions are equally likely.');

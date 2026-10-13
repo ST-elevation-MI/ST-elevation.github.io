@@ -6,12 +6,20 @@
   <meta name="referrer" content="no-referrer">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#12618a">
+  <meta name="description" content="UN 회원국의 수도를 한국어로 맞히는 무료 4지선다 세계 지리 퀴즈입니다.">
   <title>WORLD CAPITAL QUIZ · 세계 수도 퀴즈</title>
+  <link rel="canonical" href="https://st-elevation-mi.github.io/ST-elevation.github.io/ko/">
+  <link rel="alternate" hreflang="ko" href="https://st-elevation-mi.github.io/ST-elevation.github.io/ko/">
+  <link rel="alternate" hreflang="en" href="https://st-elevation-mi.github.io/ST-elevation.github.io/en/">
+  <link rel="alternate" hreflang="ja" href="https://st-elevation-mi.github.io/ST-elevation.github.io/ja/">
+  <link rel="alternate" hreflang="x-default" href="https://st-elevation-mi.github.io/ST-elevation.github.io/ko/">
   <link rel="stylesheet" href="style.css">
   <script src="countries.js" defer></script>
+  <script src="quiz-types.js" defer></script>
+  <script src="quiz-engine.js" defer></script>
   <script src="script.js" defer></script>
 </head>
-<body>
+<body data-page-kind="hub">
   <header class="header">
     <a class="brand" id="brand-home" href="index.html" aria-label="WORLD CAPITAL QUIZ 홈"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20"/><ellipse cx="24" cy="24" rx="9" ry="20"/><path d="M4 24h40M8 12h32M8 36h32"/></svg><span>WORLD CAPITAL <b>QUIZ</b></span></a>
     <nav id="main-nav" aria-label="메인 메뉴">
@@ -32,6 +40,29 @@
         <h2 id="home-title" tabindex="-1">어디까지 도전해볼까요?</h2>
         <p id="home-description" class="home-description">UN 회원국 193개국 중 새로운 나라들을 만나보세요.</p>
         <div class="language-control"><label id="language-label" for="language-select">언어</label><select id="language-select"><option value="ko">한국어</option><option value="ja">日本語</option><option value="en">English</option></select></div>
+        <nav id="language-links" class="language-links" aria-label="언어별 페이지">
+          <a id="language-link-ko" href="_site/ko/" hreflang="ko" lang="ko" aria-current="page">한국어</a>
+          <a id="language-link-en" href="_site/en/" hreflang="en" lang="en">English</a>
+          <a id="language-link-ja" href="_site/ja/" hreflang="ja" lang="ja">日本語</a>
+        </nav>
+        <fieldset class="quiz-type-settings"><legend id="quiz-type-legend">퀴즈 유형</legend>
+          <div class="quiz-type-options">
+            <a id="type-country-to-capital" class="quiz-type-option" href="_site/ko/quiz/country-to-capital/"><strong id="type-name-country-to-capital">국가 → 수도</strong><small id="type-tip-country-to-capital">나라 이름을 보고 수도 맞히기</small></a>
+            <a id="type-capital-to-country" class="quiz-type-option" href="_site/ko/quiz/capital-to-country/"><strong id="type-name-capital-to-country">수도 → 국가</strong><small id="type-tip-capital-to-country">수도를 보고 나라 맞히기</small></a>
+            <a id="type-flag-to-country" class="quiz-type-option" href="_site/ko/quiz/flag-to-country/"><strong id="type-name-flag-to-country">국기 → 국가</strong><small id="type-tip-flag-to-country">국기를 보고 나라 맞히기</small></a>
+          </div>
+        </fieldset>
+        <fieldset class="scope-settings"><legend id="scope-legend">출제 범위</legend>
+          <nav id="scope-options" class="scope-options" aria-label="출제 범위">
+            <a id="scope-all" class="scope-option" href="_site/ko/quiz/country-to-capital/">전 세계 193개국</a>
+            <a id="scope-africa" class="scope-option" href="_site/ko/practice/africa/country-to-capital/">아프리카</a>
+            <a id="scope-asia" class="scope-option" href="_site/ko/practice/asia/country-to-capital/">아시아</a>
+            <a id="scope-europe" class="scope-option" href="_site/ko/practice/europe/country-to-capital/">유럽</a>
+            <a id="scope-north-america" class="scope-option" href="_site/ko/practice/north-america/country-to-capital/">북아메리카</a>
+            <a id="scope-south-america" class="scope-option" href="_site/ko/practice/south-america/country-to-capital/">남아메리카</a>
+            <a id="scope-oceania" class="scope-option" href="_site/ko/practice/oceania/country-to-capital/">오세아니아</a>
+          </nav>
+        </fieldset>
         <fieldset class="question-settings"><legend id="question-count-legend">출제 문제 수</legend>
           <div class="count-options">
             <button type="button" id="count-10" class="count-option" aria-pressed="true"><strong>10</strong><span id="count-unit-10">문제</span><small id="count-tip-10">가볍게 시작</small></button>
@@ -48,13 +79,13 @@
       <div class="game-top"><span class="mode"><span class="status-dot"></span><span id="game-mode-label">세계 수도 도전</span></span><span class="question-count" id="question-count">문제 <b>1</b> / 10</span><span class="score-box"><span id="score-label">점수</span> <b id="score">0</b></span></div>
       <div id="progress" class="progress" role="progressbar" aria-label="완료한 문제" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><div id="progress-fill"></div></div>
       <div id="question-screen" class="game-body">
-        <div class="question-heading"><span id="question-round-label" class="round-label">CAPITALS OF THE WORLD</span><h2 id="question-title">이 나라의 수도는?</h2><p id="country" tabindex="-1"></p><span id="question-hint" class="question-hint">아래에서 정답 하나를 선택하세요</span></div>
+        <div class="question-heading"><span id="question-round-label" class="round-label">CAPITALS OF THE WORLD</span><h2 id="question-title">이 나라의 수도는?</h2><p id="country" class="country-subject" tabindex="-1"></p><span id="question-hint" class="question-hint">아래에서 정답 하나를 선택하세요</span></div>
         <div id="answers" class="answers" aria-label="수도 선택지"></div>
         <div class="answer-footer"><p id="feedback" role="status" aria-live="polite">준비되셨나요? 세계 여행을 시작해요!</p><button type="button" id="next" class="primary" hidden>다음 문제 <span aria-hidden="true">→</span></button></div>
         <p id="capital-note" class="capital-note" hidden></p>
       </div>
       <div id="result-screen" class="result" hidden><span class="result-globe"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20"/><ellipse cx="24" cy="24" rx="9" ry="20"/><path d="M4 24h40M8 12h32M8 36h32"/></svg></span><p id="result-round-label" class="round-label">QUIZ COMPLETE!</p><h2 id="result-message" tabindex="-1"></h2><p class="result-score"><strong id="result-score"></strong> <span id="result-total">/ 10</span></p><span class="percentage" id="percentage"></span><p id="result-copy" class="result-copy">세상을 알아가는 여행, 한 번 더 떠나볼까요?</p><section class="mistake-review" aria-labelledby="mistake-review-title"><h3 id="mistake-review-title">오답 복습</h3><p id="perfect-review" hidden>모든 문제를 맞혔어요. 복습할 오답이 없습니다!</p><ul id="mistake-list"></ul></section><button type="button" id="result-restart" class="primary">↻ <span id="result-restart-label">다시 시작</span></button></div>
-      <div class="game-bottom"><span id="journey-label">지구 한 바퀴, 10개의 질문</span><span id="game-bottom-copy">배우는 즐거움, 발견하는 재미 <span aria-hidden="true">✦</span></span></div>
+      <div class="game-bottom"><span id="journey-label">지구 한 바퀴, 10개의 질문</span><span id="game-bottom-copy">배우는 즐거움, 발견하는 재미 ✦</span></div>
     </section>
     <div class="below-game"><span>◎ <b id="country-count-copy">UN 회원국 193개국</b></span><span id="fresh-questions-copy">매번 새로운 문제</span><span id="no-time-limit-copy">시간 제한 없이 천천히</span></div>
   </main>
