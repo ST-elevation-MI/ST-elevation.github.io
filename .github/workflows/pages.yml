@@ -22,6 +22,7 @@ jobs:
       - name: Verify quiz and security policy
         run: |
           node capital-quiz/tests/quiz.test.cjs
+          node capital-quiz/tests/ui.test.cjs
           node capital-quiz/tests/security.test.cjs
       - name: Build public files only
         env:

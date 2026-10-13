@@ -1,6 +1,7 @@
 'use strict';
 
-const { QUIZ_TYPES, CONTINENT_IDS, CONTINENT_NAMES, CONTINENT_SLUGS } = require('../quiz-types.js');
+const { QUIZ_TYPE_IDS, CONTINENT_IDS, CONTINENT_NAMES, CONTINENT_SLUGS } = require('../engine/quiz-types.js');
+const QUIZ_TYPE_TEXT = require('../ui/quiz-type-text.js');
 
 const LOCALES = {
   ko: {
@@ -82,7 +83,7 @@ const CORE_PAGES = {
 };
 
 function practiceSeo(typeId, continent) {
-  const type = QUIZ_TYPES[typeId];
+  const type = QUIZ_TYPE_TEXT[typeId];
   const koContinent = CONTINENT_NAMES[continent].ko;
   const enContinent = CONTINENT_NAMES[continent].en;
   const jaContinent = CONTINENT_NAMES[continent].ja;
@@ -116,7 +117,7 @@ function practiceSeo(typeId, continent) {
 
 const practicePages = {};
 for (const continent of CONTINENT_IDS) {
-  for (const typeId of Object.keys(QUIZ_TYPES)) {
+  for (const typeId of QUIZ_TYPE_IDS) {
     const slug = CONTINENT_SLUGS[continent];
     practicePages[`practice-${slug}-${typeId}`] = Object.freeze({
       route: `practice/${slug}/${typeId}`,
@@ -165,18 +166,15 @@ function renderPage(template, locale, pageId, siteUrl) {
     .replace(/<link rel="alternate" hreflang="en" href="[^"]*">/, `<link rel="alternate" hreflang="en" href="${siteUrl}/en/${suffix}">`)
     .replace(/<link rel="alternate" hreflang="ja" href="[^"]*">/, `<link rel="alternate" hreflang="ja" href="${siteUrl}/ja/${suffix}">`)
     .replace(/<link rel="alternate" hreflang="x-default" href="[^"]*">/, `<link rel="alternate" hreflang="x-default" href="${siteUrl}/ko/${suffix}">`)
-    .replace('href="style.css"', `href="${assetPrefix}style.css"`)
-    .replace('src="countries.js"', `src="${assetPrefix}countries.js"`)
-    .replace('src="quiz-types.js"', `src="${assetPrefix}quiz-types.js"`)
-    .replace('src="quiz-engine.js"', `src="${assetPrefix}quiz-engine.js"`)
-    .replace('src="script.js"', `src="${assetPrefix}script.js"`);
+    .replace('href="style.css"', `href="${assetPrefix}ui/style.css"`)
+    .replace(/(<script\b[^>]*src=")\.\.\/([^"]+)(")/g, (_match, before, file, after) => `${before}${assetPrefix}${file}${after}`);
 
   for (const [id, value] of Object.entries(config.text)) html = replaceText(html, id, value);
   if (pageText) {
     for (const [id, key] of [['intro-title', 'introTitle'], ['intro-copy', 'introCopy'], ['home-title', 'homeTitle'], ['home-description', 'homeDescription']]) {
       html = replaceText(html, id, pageText[key]);
     }
-    html = replaceText(html, 'instructions-copy', QUIZ_TYPES[page.typeId].instructions[locale]);
+    html = replaceText(html, 'instructions-copy', QUIZ_TYPE_TEXT[page.typeId].instructions[locale]);
   }
   for (const [id, value] of Object.entries(config.aria)) html = replaceAttribute(html, id, 'aria-label', value);
   html = replaceAttribute(html, 'brand-home', 'href', localeHomeHref);
@@ -185,7 +183,7 @@ function renderPage(template, locale, pageId, siteUrl) {
     const languageHref = `${assetPrefix}${code}/${suffix}`;
     html = replaceAttribute(html, `language-link-${code}`, 'href', languageHref);
   }
-  for (const typeId of Object.keys(QUIZ_TYPES)) {
+  for (const typeId of QUIZ_TYPE_IDS) {
     const typePage = CORE_PAGES[typeId];
     const typeHref = page.kind === 'hub'
       ? `${typePage.route}/`

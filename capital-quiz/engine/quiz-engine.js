@@ -1,6 +1,6 @@
 "use strict";
 
-// Pure quiz mechanics shared by every quiz type. UI rendering stays in script.js.
+// Pure quiz mechanics. This module has no browser, markup or style dependencies.
 const QuizEngine = Object.freeze({
   normalize(value) {
     return String(value).normalize("NFKC").trim().toLocaleLowerCase("en");
@@ -20,7 +20,7 @@ const QuizEngine = Object.freeze({
   },
 
   createGame(pool, count, allowedCounts, random = Math.random) {
-    if (!allowedCounts.includes(count) || count > pool.length) throw new Error("Unsupported question count.");
+    if (!Number.isInteger(count) || count < 1 || !allowedCounts.includes(count) || count > pool.length) throw new Error("Unsupported question count.");
     const game = this.createQuestionDeck(pool, random).slice(0, count);
     if (new Set(game.map((item) => item.id)).size !== count) throw new Error("Duplicate questions are not allowed.");
     return game;
@@ -52,8 +52,8 @@ const QuizEngine = Object.freeze({
     return this.normalize(selected) === this.normalize(correct);
   },
 
-  recordMistake({ questionIndex, subject, questionTitle, options, selectedAnswer, correctAnswer, countryId }) {
-    return Object.freeze({ questionIndex, subject, questionTitle, options: [...options], selectedAnswer, correctAnswer, countryId });
+  recordMistake({ question, selectedIndex }) {
+    return Object.freeze({ question, selectedIndex, selectedAnswer: question.options[selectedIndex], correctAnswer: question.correctAnswer });
   },
 
   summarize(score, total) {
@@ -63,4 +63,6 @@ const QuizEngine = Object.freeze({
     return Object.freeze({ score, total, percentage: Math.round(score / total * 100) });
   }
 });
+
+if (typeof module !== "undefined" && module.exports) module.exports = QuizEngine;
 

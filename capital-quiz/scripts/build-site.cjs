@@ -7,11 +7,11 @@ const quizRoot = path.resolve(__dirname, '..');
 const projectRoot = path.resolve(quizRoot, '..');
 const output = path.join(projectRoot, '_site');
 const publicAssets = [
-  ['style.css', path.join(quizRoot, 'style.css')],
-  ['countries.js', path.join(quizRoot, 'countries.js')],
-  ['quiz-types.js', path.join(quizRoot, 'quiz-types.js')],
-  ['quiz-engine.js', path.join(quizRoot, 'quiz-engine.js')],
-  ['script.js', path.join(quizRoot, 'script.js')],
+  ...[
+    'data/countries.js', 'data/capital-context.js',
+    'engine/quiz-types.js', 'engine/quiz-engine.js', 'engine/quiz-session.js',
+    'ui/style.css', 'ui/messages.js', 'ui/quiz-type-text.js', 'ui/quiz-view.js', 'app.js'
+  ].map(file => [file, path.join(quizRoot, file)]),
   ['mori-stay/index.html', path.join(projectRoot, 'mori-stay/index.html')],
   ['mori-stay/partner/index.html', path.join(projectRoot, 'mori-stay/partner/index.html')],
   ['mori-stay/assets/korea-stay.png', path.join(projectRoot, 'mori-stay/assets/korea-stay.png')]
@@ -31,7 +31,7 @@ for (const [destinationName, source] of publicAssets) {
   fs.mkdirSync(path.dirname(destination), { recursive: true });
   fs.copyFileSync(source, destination, fs.constants.COPYFILE_EXCL);
 }
-const template = fs.readFileSync(path.join(quizRoot, 'index.html'), 'utf8');
+const template = fs.readFileSync(path.join(quizRoot, 'ui/index.html'), 'utf8');
 for (const locale of Object.keys(LOCALES)) {
   const localeDirectory = path.join(output, locale);
   fs.mkdirSync(localeDirectory);

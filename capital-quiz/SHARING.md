@@ -9,6 +9,7 @@ GitHub Pages에는 선택한 정적 파일만 올라갑니다. 방문자가 이 
 ## 적용한 보호 조치
 
 - `capital-quiz/scripts/build-site.cjs`가 퀴즈 공용 파일과 언어별 페이지, 별도 `mori-stay/` 페이지, robots.txt, sitemap.xml만 저장소 루트의 `_site`에 생성합니다. 테스트·문서·설정·다른 파일은 사이트에 배포되지 않습니다. 심볼릭 링크와 남은 빌드 파일이 있으면 중단합니다.
+- 원본은 `engine/`(출제·진행), `data/`(국가·수도), `ui/`(화면·디자인)로 분리되어 있습니다. [구조와 디자인 교체 안내](ARCHITECTURE.md)를 참고하세요.
 - CSP: 같은 출처의 JS/CSS만 허용하고 외부 통신, 플러그인, 폼 전송을 차단합니다. 인라인 스크립트와 eval은 허용하지 않습니다.
 - Referrer 정책: 다른 페이지에 현재 주소를 보내지 않습니다.
 - .gitignore: 환경변수·키·로컬 설정 파일 등이 실수로 새 커밋에 들어가는 것을 줄입니다. 이미 추적된 파일이나 이력에서 비밀을 삭제해 주지는 않습니다.
@@ -36,6 +37,7 @@ GitHub Pages에는 선택한 정적 파일만 올라갑니다. 방문자가 이 
 
 ```sh
 node capital-quiz/tests/quiz.test.cjs
+node capital-quiz/tests/ui.test.cjs
 node capital-quiz/tests/security.test.cjs
 node capital-quiz/scripts/build-site.cjs
 ```

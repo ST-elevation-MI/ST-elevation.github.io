@@ -6,27 +6,31 @@ const os = require('node:os');
 const { execFileSync, spawnSync } = require('node:child_process');
 const quizRoot = path.resolve(__dirname, '..');
 const projectRoot = path.resolve(quizRoot, '..');
-const sourceAssets = ['index.html', 'style.css', 'countries.js', 'quiz-types.js', 'quiz-engine.js', 'script.js'];
+const publicSharedAssets = [
+  'app.js', 'data/countries.js', 'data/capital-context.js',
+  'engine/quiz-types.js', 'engine/quiz-engine.js', 'engine/quiz-session.js',
+  'ui/style.css', 'ui/messages.js', 'ui/quiz-type-text.js', 'ui/quiz-view.js'
+];
+const sourceAssets = ['ui/index.html', ...publicSharedAssets];
 const siteAssets = [
   'mori-stay/index.html',
   'mori-stay/partner/index.html',
   'mori-stay/assets/korea-stay.png'
 ];
-const publicSharedAssets = ['style.css', 'countries.js', 'quiz-types.js', 'quiz-engine.js', 'script.js'];
 const quizTypes = ['country-to-capital', 'capital-to-country', 'flag-to-country'];
 const continents = {
   africa: 'Africa', asia: 'Asia', europe: 'Europe',
   'north-america': 'North America', 'south-america': 'South America', oceania: 'Oceania'
 };
-const html = fs.readFileSync(path.join(quizRoot, 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(quizRoot, 'ui/index.html'), 'utf8');
 assert.match(html, /http-equiv="Content-Security-Policy"/);
 for (const directive of ["default-src 'none'", "script-src 'self'", "connect-src 'none'", "object-src 'none'", "base-uri 'none'", "form-action 'none'"]) assert.ok(html.includes(directive));
 assert.doesNotMatch(html, /unsafe-inline|unsafe-eval|\son\w+\s*=/i);
 assert.match(html, /name="referrer" content="no-referrer"/);
-for (const locale of ['ko', 'en', 'ja']) assert.match(html, new RegExp(`id="language-link-${locale}" href="../_site/${locale}/"`));
-for (const typeId of quizTypes) assert.ok(html.includes(`href="../_site/ko/quiz/${typeId}/"`));
-for (const slug of Object.keys(continents)) assert.ok(html.includes(`href="../_site/ko/practice/${slug}/country-to-capital/"`));
-for (const match of html.matchAll(/<script\b[^>]*src="([^"]+)"/g)) assert.ok(publicSharedAssets.includes(match[1]));
+for (const locale of ['ko', 'en', 'ja']) assert.match(html, new RegExp(`id="language-link-${locale}" href="../../_site/${locale}/"`));
+for (const typeId of quizTypes) assert.ok(html.includes(`href="../../_site/ko/quiz/${typeId}/"`));
+for (const slug of Object.keys(continents)) assert.ok(html.includes(`href="../../_site/ko/practice/${slug}/country-to-capital/"`));
+for (const match of html.matchAll(/<script\b[^>]*src="([^"]+)"/g)) assert.ok(publicSharedAssets.includes(match[1].replace(/^\.\.\//, '')));
 // These are regression checks, not a general-purpose secret scanner.
 for (const [base, name] of [
   ...sourceAssets.map(name => [quizRoot, name]),
@@ -52,7 +56,19 @@ try {
   fs.writeFileSync(path.join(temp, '.env'), 'TEST_ONLY=must-not-publish');
   fs.writeFileSync(path.join(temp, 'private-notes.txt'), 'TEST_ONLY');
   execFileSync(process.execPath, [path.join(tempQuiz, 'scripts/build-site.cjs')]);
-  assert.deepEqual(fs.readdirSync(path.join(temp, '_site')).sort(), ['countries.js', 'en', 'index.html', 'ja', 'ko', 'mori-stay', 'quiz-engine.js', 'quiz-types.js', 'robots.txt', 'script.js', 'sitemap.xml', 'style.css']);
+  assert.deepEqual(fs.readdirSync(path.join(temp, '_site')).sort(), ['app.js', 'data', 'en', 'engine', 'index.html', 'ja', 'ko', 'mori-stay', 'robots.txt', 'sitemap.xml', 'ui']);
+  assert.deepEqual(fs.readdirSync(path.join(temp, '_site', 'ui')).sort(), ['messages.js', 'quiz-type-text.js', 'quiz-view.js', 'style.css']);
+  assert.deepEqual(fs.readdirSync(path.join(temp, '_site', 'engine')).sort(), ['quiz-engine.js', 'quiz-session.js', 'quiz-types.js']);
+  assert.deepEqual(fs.readdirSync(path.join(temp, '_site', 'data')).sort(), ['capital-context.js', 'countries.js']);
+  const checkPageAssets = (pagePath, pageHtml) => {
+    for (const match of pageHtml.matchAll(/<(?:script|link)\b[^>]*(?:src|href)="([^"]+)"/g)) {
+      if (/^https:\/\//.test(match[1])) continue;
+      const assetPath = path.resolve(path.dirname(pagePath), match[1]);
+      const assetName = path.relative(path.join(temp, '_site'), assetPath);
+      assert.ok(publicSharedAssets.includes(assetName), `unreviewed asset ${assetName}`);
+      assert.ok(fs.statSync(assetPath).isFile(), `missing asset ${assetName}`);
+    }
+  };
   assert.deepEqual(fs.readdirSync(path.join(temp, '_site', 'mori-stay')).sort(), ['assets', 'index.html', 'partner']);
   assert.deepEqual(fs.readdirSync(path.join(temp, '_site', 'mori-stay', 'partner')), ['index.html']);
   assert.deepEqual(fs.readdirSync(path.join(temp, '_site', 'mori-stay', 'assets')), ['korea-stay.png']);
@@ -61,10 +77,10 @@ try {
     assert.match(localized, new RegExp(`<html lang="${locale}">`));
     assert.match(localized, new RegExp(`<link rel="canonical" href="https://st-elevation-mi.github.io/ST-elevation.github.io/${locale}/">`));
     for (const alternate of ['ko', 'en', 'ja', 'x-default']) assert.match(localized, new RegExp(`hreflang="${alternate}"`));
-    assert.match(localized, /href="\.\.\/style\.css"/);
-    assert.match(localized, /src="\.\.\/script\.js"/);
-    assert.match(localized, /src="\.\.\/quiz-types\.js"/);
-    assert.match(localized, /src="\.\.\/quiz-engine\.js"/);
+    assert.match(localized, /href="\.\.\/ui\/style\.css"/);
+    assert.match(localized, /src="\.\.\/app\.js"/);
+    assert.match(localized, /src="\.\.\/engine\/quiz-session\.js"/);
+    checkPageAssets(path.join(temp, '_site', locale, 'index.html'), localized);
     assert.match(localized, /<body data-page-kind="hub">/);
   }
   const typePages = Object.fromEntries(quizTypes.map(typeId => [typeId, `quiz/${typeId}`]));
@@ -82,7 +98,8 @@ try {
     assert.ok(localized.includes(`<body data-page-kind="quiz" data-quiz-type="${typeId}">`));
     assert.ok(localized.includes(`id="type-${typeId}" aria-current="page"`));
     assert.ok(localized.includes('id="scope-all" aria-current="page"'));
-    assert.match(localized, /href="\.\.\/\.\.\/\.\.\/style\.css"/);
+    assert.match(localized, /href="\.\.\/\.\.\/\.\.\/ui\/style\.css"/);
+    checkPageAssets(pagePath, localized);
     for (const alternate of ['ko', 'en', 'ja', 'x-default']) assert.match(localized, new RegExp(`hreflang="${alternate}"`));
     pageTitles.add(localized.match(/<title>([^<]+)<\/title>/)[1]);
   }
@@ -96,7 +113,8 @@ try {
     assert.ok(localized.includes(`<body data-page-kind="quiz" data-quiz-type="${typeId}" data-continent="${continent}">`));
     assert.ok(localized.includes(`id="type-${typeId}" aria-current="page"`));
     assert.ok(localized.includes(`id="scope-${slug}" aria-current="page"`));
-    assert.match(localized, /href="\.\.\/\.\.\/\.\.\/\.\.\/style\.css"/);
+    assert.match(localized, /href="\.\.\/\.\.\/\.\.\/\.\.\/ui\/style\.css"/);
+    checkPageAssets(pagePath, localized);
     for (const alternateType of quizTypes) assert.ok(localized.includes(`href="../../../practice/${slug}/${alternateType}/"`));
     assert.ok(localized.includes(`href="../../../../en/${route}/"`));
     for (const alternate of ['ko', 'en', 'ja', 'x-default']) assert.match(localized, new RegExp(`hreflang="${alternate}"`));

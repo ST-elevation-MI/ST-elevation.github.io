@@ -5,7 +5,7 @@
 // id: ISO 3166-1 alpha-2. Continents use UN geographic placement,
 // splitting the Americas into North America (including Caribbean) and South America.
 // One quiz answer per country; special capital roles are explained in the UI.
-// Sources and maintenance notes: DATA_SOURCES.md.
+// Sources and maintenance notes: ../DATA_SOURCES.md.
 const countries = [
   {
     "id": "AF",
@@ -1981,3 +1981,5 @@ function validateCountries(data) {
 validateCountries(countries);
 countries.forEach(Object.freeze);
 Object.freeze(countries);
+
+if (typeof module !== "undefined" && module.exports) module.exports = { countries, validateCountries };
