@@ -21,12 +21,12 @@ jobs:
           node-version: '22'
       - name: Verify quiz and security policy
         run: |
-          node tests/quiz.test.cjs
-          node tests/security.test.cjs
+          node capital-quiz/tests/quiz.test.cjs
+          node capital-quiz/tests/security.test.cjs
       - name: Build public files only
         env:
           SITE_URL: https://st-elevation-mi.github.io/ST-elevation.github.io
-        run: node scripts/build-site.cjs
+        run: node capital-quiz/scripts/build-site.cjs
       - uses: actions/upload-pages-artifact@v4
         with:
           path: _site

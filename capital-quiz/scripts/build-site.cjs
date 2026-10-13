@@ -3,13 +3,18 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { LOCALES, PAGES, renderPage } = require('./locales.cjs');
-const root = path.resolve(__dirname, '..');
-const output = path.join(root, '_site');
+const quizRoot = path.resolve(__dirname, '..');
+const projectRoot = path.resolve(quizRoot, '..');
+const output = path.join(projectRoot, '_site');
 const publicAssets = [
-  'style.css', 'countries.js', 'quiz-types.js', 'quiz-engine.js', 'script.js',
-  'mori-stay/index.html',
-  'mori-stay/partner/index.html',
-  'mori-stay/assets/korea-stay.png'
+  ['style.css', path.join(quizRoot, 'style.css')],
+  ['countries.js', path.join(quizRoot, 'countries.js')],
+  ['quiz-types.js', path.join(quizRoot, 'quiz-types.js')],
+  ['quiz-engine.js', path.join(quizRoot, 'quiz-engine.js')],
+  ['script.js', path.join(quizRoot, 'script.js')],
+  ['mori-stay/index.html', path.join(projectRoot, 'mori-stay/index.html')],
+  ['mori-stay/partner/index.html', path.join(projectRoot, 'mori-stay/partner/index.html')],
+  ['mori-stay/assets/korea-stay.png', path.join(projectRoot, 'mori-stay/assets/korea-stay.png')]
 ];
 const defaultSiteUrl = 'https://st-elevation-mi.github.io/ST-elevation.github.io';
 const siteUrl = (process.env.SITE_URL || defaultSiteUrl).replace(/\/$/, '');
@@ -20,14 +25,13 @@ if (fs.existsSync(output)) {
     throw new Error('_site must be absent or an empty real directory. Review and remove the old build before rebuilding.');
   }
 } else fs.mkdirSync(output);
-for (const file of publicAssets) {
-  const source = path.join(root, file);
-  if (!fs.lstatSync(source).isFile()) throw new Error(`Not a regular file: ${file}`);
-  const destination = path.join(output, file);
+for (const [destinationName, source] of publicAssets) {
+  if (!fs.lstatSync(source).isFile()) throw new Error(`Not a regular file: ${destinationName}`);
+  const destination = path.join(output, destinationName);
   fs.mkdirSync(path.dirname(destination), { recursive: true });
   fs.copyFileSync(source, destination, fs.constants.COPYFILE_EXCL);
 }
-const template = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const template = fs.readFileSync(path.join(quizRoot, 'index.html'), 'utf8');
 for (const locale of Object.keys(LOCALES)) {
   const localeDirectory = path.join(output, locale);
   fs.mkdirSync(localeDirectory);

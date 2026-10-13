@@ -4,46 +4,54 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 const { execFileSync, spawnSync } = require('node:child_process');
-const root = path.resolve(__dirname, '..');
+const quizRoot = path.resolve(__dirname, '..');
+const projectRoot = path.resolve(quizRoot, '..');
 const sourceAssets = ['index.html', 'style.css', 'countries.js', 'quiz-types.js', 'quiz-engine.js', 'script.js'];
 const siteAssets = [
   'mori-stay/index.html',
   'mori-stay/partner/index.html',
   'mori-stay/assets/korea-stay.png'
 ];
-const assets = [...sourceAssets, ...siteAssets];
 const publicSharedAssets = ['style.css', 'countries.js', 'quiz-types.js', 'quiz-engine.js', 'script.js'];
 const quizTypes = ['country-to-capital', 'capital-to-country', 'flag-to-country'];
 const continents = {
   africa: 'Africa', asia: 'Asia', europe: 'Europe',
   'north-america': 'North America', 'south-america': 'South America', oceania: 'Oceania'
 };
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(quizRoot, 'index.html'), 'utf8');
 assert.match(html, /http-equiv="Content-Security-Policy"/);
 for (const directive of ["default-src 'none'", "script-src 'self'", "connect-src 'none'", "object-src 'none'", "base-uri 'none'", "form-action 'none'"]) assert.ok(html.includes(directive));
 assert.doesNotMatch(html, /unsafe-inline|unsafe-eval|\son\w+\s*=/i);
 assert.match(html, /name="referrer" content="no-referrer"/);
-for (const locale of ['ko', 'en', 'ja']) assert.match(html, new RegExp(`id="language-link-${locale}" href="_site/${locale}/"`));
-for (const typeId of quizTypes) assert.ok(html.includes(`href="_site/ko/quiz/${typeId}/"`));
-for (const slug of Object.keys(continents)) assert.ok(html.includes(`href="_site/ko/practice/${slug}/country-to-capital/"`));
+for (const locale of ['ko', 'en', 'ja']) assert.match(html, new RegExp(`id="language-link-${locale}" href="../_site/${locale}/"`));
+for (const typeId of quizTypes) assert.ok(html.includes(`href="../_site/ko/quiz/${typeId}/"`));
+for (const slug of Object.keys(continents)) assert.ok(html.includes(`href="../_site/ko/practice/${slug}/country-to-capital/"`));
 for (const match of html.matchAll(/<script\b[^>]*src="([^"]+)"/g)) assert.ok(publicSharedAssets.includes(match[1]));
 // These are regression checks, not a general-purpose secret scanner.
-for (const name of assets) {
-  const content = fs.readFileSync(path.join(root, name), 'utf8');
+for (const [base, name] of [
+  ...sourceAssets.map(name => [quizRoot, name]),
+  ...siteAssets.map(name => [projectRoot, name])
+]) {
+  const content = fs.readFileSync(path.join(base, name), 'utf8');
   if (!name.endsWith('.png')) assert.doesNotMatch(content, /-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----|github_pat_[A-Za-z0-9_]+|gh[pousr]_[A-Za-z0-9]{30,}|AKIA[A-Z0-9]{16}/);
 }
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'capital-quiz-build-test-'));
 try {
-  fs.mkdirSync(path.join(temp, 'scripts'));
-  fs.copyFileSync(path.join(root, 'scripts/build-site.cjs'), path.join(temp, 'scripts/build-site.cjs'));
-  fs.copyFileSync(path.join(root, 'scripts/locales.cjs'), path.join(temp, 'scripts/locales.cjs'));
-  for (const file of assets) {
+  const tempQuiz = path.join(temp, 'capital-quiz');
+  fs.mkdirSync(path.join(tempQuiz, 'scripts'), { recursive: true });
+  fs.copyFileSync(path.join(quizRoot, 'scripts/build-site.cjs'), path.join(tempQuiz, 'scripts/build-site.cjs'));
+  fs.copyFileSync(path.join(quizRoot, 'scripts/locales.cjs'), path.join(tempQuiz, 'scripts/locales.cjs'));
+  for (const file of sourceAssets) {
+    fs.mkdirSync(path.dirname(path.join(tempQuiz, file)), { recursive: true });
+    fs.copyFileSync(path.join(quizRoot, file), path.join(tempQuiz, file));
+  }
+  for (const file of siteAssets) {
     fs.mkdirSync(path.dirname(path.join(temp, file)), { recursive: true });
-    fs.copyFileSync(path.join(root, file), path.join(temp, file));
+    fs.copyFileSync(path.join(projectRoot, file), path.join(temp, file));
   }
   fs.writeFileSync(path.join(temp, '.env'), 'TEST_ONLY=must-not-publish');
   fs.writeFileSync(path.join(temp, 'private-notes.txt'), 'TEST_ONLY');
-  execFileSync(process.execPath, [path.join(temp, 'scripts/build-site.cjs')]);
+  execFileSync(process.execPath, [path.join(tempQuiz, 'scripts/build-site.cjs')]);
   assert.deepEqual(fs.readdirSync(path.join(temp, '_site')).sort(), ['countries.js', 'en', 'index.html', 'ja', 'ko', 'mori-stay', 'quiz-engine.js', 'quiz-types.js', 'robots.txt', 'script.js', 'sitemap.xml', 'style.css']);
   assert.deepEqual(fs.readdirSync(path.join(temp, '_site', 'mori-stay')).sort(), ['assets', 'index.html', 'partner']);
   assert.deepEqual(fs.readdirSync(path.join(temp, '_site', 'mori-stay', 'partner')), ['index.html']);
@@ -105,7 +113,7 @@ try {
   for (const { route } of practicePages) for (const locale of ['ko', 'en', 'ja']) assert.ok(sitemap.includes(`/${locale}/${route}/`));
   assert.match(fs.readFileSync(path.join(temp, '_site/robots.txt'), 'utf8'), /Sitemap: https:\/\//);
   fs.writeFileSync(path.join(temp, '_site', 'leftover.txt'), 'TEST_ONLY');
-  assert.notEqual(spawnSync(process.execPath, [path.join(temp, 'scripts/build-site.cjs')]).status, 0);
+  assert.notEqual(spawnSync(process.execPath, [path.join(tempQuiz, 'scripts/build-site.cjs')]).status, 0);
 } finally {
   fs.rmSync(temp, { recursive: true, force: true });
 }
