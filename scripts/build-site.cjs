@@ -4,7 +4,12 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, '_site');
-const files = ['index.html', 'style.css', 'countries.js', 'script.js'];
+const files = [
+  'index.html', 'style.css', 'countries.js', 'script.js',
+  'mori-stay/index.html',
+  'mori-stay/partner/index.html',
+  'mori-stay/assets/korea-stay.png',
+];
 // Fail closed rather than publish leftovers or follow a directory symlink.
 if (fs.existsSync(output)) {
   if (!fs.lstatSync(output).isDirectory() || fs.readdirSync(output).length) {
@@ -14,6 +19,8 @@ if (fs.existsSync(output)) {
 for (const file of files) {
   const source = path.join(root, file);
   if (!fs.lstatSync(source).isFile()) throw new Error(`Not a regular file: ${file}`);
-  fs.copyFileSync(source, path.join(output, file), fs.constants.COPYFILE_EXCL);
+  const destination = path.join(output, file);
+  fs.mkdirSync(path.dirname(destination), { recursive: true });
+  fs.copyFileSync(source, destination, fs.constants.COPYFILE_EXCL);
 }
-console.log('Public artifact contains only:', fs.readdirSync(output).sort().join(', '));
+console.log('Public artifact contains only:', files.join(', '));
